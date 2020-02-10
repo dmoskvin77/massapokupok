@@ -1,0 +1,11 @@
+{assign var=this value=$BoardadControl}
+{assign var=boardadid value=$this.boardad->id}
+
+<h1>Объявление</h1>
+
+<br/><p><b>Тип:</b> {$this.boardtypes.$boardadid}</p>
+{if $this.boardcats.$boardadid}<p><b>Категория:</b> {$this.boardcats.$boardadid}</p>{/if}
+<h2>{$this.boardad->name}</h2>
+<br/><p>{$this.boardad->description|bbcode}</p>
+<br/><p><b>Добавлено:</b> {$this.boardad->dateCreate|dateformat:"d M Y"}</p>
+<p><b>Обновлено:</b> {$this.boardad->dateUpdate|dateformat:"d M Y"}</p>

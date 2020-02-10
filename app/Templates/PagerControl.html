@@ -1,0 +1,26 @@
+{if ($PagerControl.totalPages) > 1}
+<ul class="paging">
+	<li class="prev">
+		{if $PagerControl.prevPage ne 0}
+			<a href="{$PagerControl.url}&amp;{$PagerControl.param}={$PagerControl.prevPage}" rel="prev">&larr;</a>
+		{else}
+			&larr;
+		{/if}
+	</li>
+	{section name=page start=1 step=1 loop=$PagerControl.totalPages+1}
+		{assign var="page" value=$smarty.section.page.index}
+		{if ($page == $PagerControl.currentPage)}
+			<li class="current">{$page}</li>
+		{else}
+			<li><a href="{$PagerControl.url}&amp;{$PagerControl.param}={$page}">{$page}</a></li>
+		{/if}
+	{/section}
+	<li class="next">
+		{if $PagerControl.nextPage ne 0}
+			<a href="{$PagerControl.url}&amp;{$PagerControl.param}={$PagerControl.nextPage}" rel="next">&rarr;</a>
+		{else}
+			&rarr;
+		{/if}
+	</li>
+</ul>
+{/if}

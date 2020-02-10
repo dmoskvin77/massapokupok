@@ -1,0 +1,64 @@
+{assign var=this value=$MyboardadsControl}
+
+{literal}
+<script type="text/javascript">
+	$().ready(function()
+	{
+        $('.usereditad').click(function(e)
+        {
+            var gotId = $(this).attr("id");
+            var pureId = gotId.split("usereditad-").join("");
+            window.location.href = "/index.php?show=chooseboardtype&id="+pureId;
+        });
+
+        $('.userholdad').click(function(e)
+        {
+            var gotId = $(this).attr("id");
+            var pureId = gotId.split("userholdad-").join("");
+            window.location.href = "/index.php?do=userholdad&id="+pureId;
+        });
+
+        $('.userremovead').click(function(e)
+        {
+            var gotId = $(this).attr("id");
+            var pureId = gotId.split("userremovead-").join("");
+            window.location.href = "/index.php?do=userremovead&id="+pureId;
+        });
+
+	});
+
+</script>
+{/literal}
+
+{if $this.adList}
+	<h4>Объявления</h4>
+	<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0" style="font-size: 11px;">
+		<tr>
+			<th style="text-align: center;">ID</th>
+			<th style="text-align: center;">Объявление</th>
+			<th style="text-align: center;">Дата создания</th>
+			<th style="text-align: center;">Статус</th>
+			<th style="text-align: center;">Действия</th>
+		</tr>
+
+		{foreach from=$this.adList item=onead}
+        {assign var=adId value=$onead->id}
+        {assign var=adStatus value=$onead->status}
+        {assign var=adStatusname value=$this.adStatuses.$adStatus}
+        {assign var=adTypeId value=$onead->typeId}
+		<tr>
+			<td>{$onead->id}</td>
+			<td>{$this.preparedTypes.$adTypeId} <a href="{link show=board id=$onead->id}">{$onead->name}</a></td>
+			<td style="text-align: center;">{$onead->dateCreate|dateformat:"d M Y"}</td>
+			<td style="text-align: center;">{$adStatusname}</td>
+			<td style="text-align: center;">
+                <button id="usereditad-{$onead->id}" class="btn btn-default btn-sm usereditad" type="button" title="Редактировать"><span class="glyphicon glyphicon-pencil"></span></button> {if $onead->status == 'STATUS_ACTIVE'}<button id="userholdad-{$onead->id}" class="btn btn-default btn-sm userholdad" type="button" title="Приостановить"><span class="glyphicon glyphicon-minus-sign"></span></button>{/if} <button id="userremovead-{$onead->id}" class="btn btn-default btn-sm userremovead" type="button" title="Удалить"><span class="glyphicon glyphicon-remove"></span></button>
+            </td>
+		</tr>
+		{/foreach}
+
+	</table>
+
+{else}
+	<h4>Список объявлений пуст</h4>
+{/if}

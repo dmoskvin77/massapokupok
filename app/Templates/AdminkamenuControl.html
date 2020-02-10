@@ -1,0 +1,24 @@
+{assign var=this value=$AdminkamenuControl}
+{if $this.permissions}
+
+<ul class="nav navbar-nav side-nav">
+    {if $this.permissions == '*'}{/if}
+    <li><a href="{alink show=settingsmanager}"><i class="fa fa-fw fa-wrench"></i> Настройки сайта</a></li>
+    {if $ownerSiteId == 1}<li><a href="{alink show=managesites}"><i class="fa fa-fw fa-globe"></i> Управление сайтами</a></li>{/if}
+    <li><a href="{alink show=managenews}"><i class="fa fa-fw fa-bullhorn"></i> Управление новостями</a></li>
+    <li><a href="{alink show=manageoffices}"><i class="fa fa-fw fa-building-o"></i> Управление офисами</a></li>
+    <li><a href="{alink show=managecontent}"><i class="fa fa-fw fa-book"></i> Управление контентом</a><hr/></li>
+    <li><a href="{alink show=managecategories}"><i class="fa fa-fw fa-bookmark-o"></i> Управление категориями</a></li>
+    <li><a href="{alink show=manageheads}"><i class="fa fa-fw fa-tags"></i> Управление закупками</a></li>
+    <li><a href="{alink show=manageusers}"><i class="fa fa-fw fa-user"></i> Управление пользователями</a></li>
+    <li><a href="{alink show=managepagecomments}"><i class="fa fa-fw fa-quote-left"></i> Модерация комментариев</a></li>
+    <li><a href="{alink show=manageboard}"><i class="fa fa-fw fa-pencil-square-o"></i> Модерация объявлений</a></li>
+    <li><a href="{alink show=managebroadcast}"><i class="fa fa-fw fa-envelope-o"></i> Модерация рассылок</a></li>
+    {if $ownerSiteId == 1}<li><a href="{alink show=manageyakassa}"><i class="fa fa-fw fa-credit-card"></i> Модерация Яндекс кассы</a></li>{/if}
+    <li><a href="{alink show=manageservices}"><i class="fa fa-fw fa-money"></i> Платные услуги</a></li>
+    <li><a href="{alink show=manageinvoices}"><i class="fa fa-fw fa-warning"></i> Счета за услуги сайта</a><hr/></li>
+    <li><a href="{alink show=masterpassword}"><i class="fa fa-fw fa-shield"></i> Сменить мастер-пароль</a></li>
+    <li><a href="{alink show=operatorpassword}"><i class="fa fa-fw fa-unlock-alt"></i> Сменить пароль оператора</a><hr/></li>
+    <!-- All icons: http://wet-boew.github.io/wet-boew-styleguide/v4/design/icons-en.html -->
+</ul>
+{/if}

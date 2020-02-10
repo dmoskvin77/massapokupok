@@ -1,0 +1,2 @@
+html h1 { height: 0; }
+html h1 b { height: expression(this.parentNode.clientHeight * 0.6); }

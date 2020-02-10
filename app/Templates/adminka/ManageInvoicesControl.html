@@ -1,0 +1,86 @@
+{assign var=this value=$ManageInvoicesControl}
+{formrestore id="users-filter"}
+
+<h2>Счета за услуги сайта</h2>
+
+<form id="services-filter" method="get" action="">
+
+	<input type="hidden" name="show" value="manageinvoices"/>
+	<input type="hidden" name="isalive" value="1"/>
+
+	<div class="filter-users">
+		<h4>Фильтр для поиска</h4>
+		<dl>
+			<dt>ID:</dt>
+			<dd><input type="text" name="id" id="id" /></dd>
+		</dl>
+		<dl>
+			<dt>Статус оплаты:</dt>
+			<dd>
+                <select name="status">
+                    <option value="0">---</option>
+                    {foreach from=$this.commStatuses item=onestatus key=onestatkey}
+                        <option value="{$onestatkey}" {if $this.defStatus == $onestatkey}selected="selected"{/if}>{$onestatus}</option>
+                    {/foreach}
+                </select>
+            </dd>
+		</dl>
+        <dl>
+            <dt>Тип услуги:</dt>
+            <dd>
+                <select name="type">
+                    <option value="0">---</option>
+                    {foreach from=$this.commTypes item=onetype key=onetypekey}
+						<option value="{$onetypekey}" {if $this.defType == $onetypekey}selected="selected"{/if}>{$onetype}</option>
+                    {/foreach}
+                </select>
+            </dd>
+        </dl>
+		<dl>
+			<dd><input type="submit" id="submit" value="Показать список отбора"/></dd>
+		</dl>
+	</div>
+</form>
+
+{if $this.commList}
+
+	<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+		<tr>
+			<th>ID</th>
+			<th>Тип</th>
+            <th>Статус</th>
+			<th>Сумма</th>
+            <th>Оплачено?</th>
+			<th>Плательщик</th>
+			<th>Действия</th>
+		</tr>
+		{foreach item=comm from=$this.commList}
+			{assign var=commStatus value=$comm->status}
+            {assign var=commType value=$comm->type}
+            {assign var=commWay value=$comm->way}
+
+			<tr class="{cycle values='color,'}">
+				<td>{$comm->id}</td>
+                <td>{$this.commTypes.$commType}</td>
+                <td>{$this.commStatuses.$commStatus}</td>
+                <td>{$comm->needAmount}</td>
+				<td><b>{if $comm->payAmount > 0}+ ({$this.commWays.$commWay}, {$comm->userInfo}){else}-{/if}</b></td>
+
+                <td></td>
+
+				<td>
+                    {if !$comm->dateConfirm && $ownerSiteId == 1}<a href="{alink do=aprovecomm id=$comm->id}">Подтвердить оплату</a>{/if}
+                    {if !$comm->dateConfirm && $comm->payAmount > 0 && $ownerSiteId == 1} | {/if}{if $comm->payAmount > 0 && $ownerSiteId == 1}<a href="{alink do=declinecomm id=$comm->id}">Отклонить</a>{/if}
+                    | Оплатить (сообщить об оплате)
+				</td>
+			</tr>
+		{/foreach}
+	</table>
+
+    <p>{pager total=$this.total per=$this.perPage}</p>
+
+{else}
+
+    <h4>Список счетов пуст.</h4>
+
+{/if}

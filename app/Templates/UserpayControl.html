@@ -1,0 +1,63 @@
+{assign var=this value=$UserpayControl}
+
+{formrestore id="user-pay"}
+
+{loadscript file='/css/ketchup/jquery.ketchup.css' type='css'}
+{loadscript file='/js/ketchup/jquery.ketchup.all.min.js' type='js'}
+
+{literal}
+<script type="text/javascript">
+	$().ready(function()
+	{
+		$('#user-pay').ketchup();
+	});
+
+</script>
+{/literal}
+
+{if $this.fields}
+    <p>Вы можете оплатить счёт с помощью "Единого кошелька". Кошелёк будет автоматически заведен при первой оплате и привязан к номеру Вашего телефона. Пополнение доступно любым из перечисленных способов: <b>Сбербанк</b>, карта <b>VISA</b> и <b>MasterCard</b>, <b>QIWI</b>, <b>Яндекс</b> и другие электронные деньги. {if $this.payCommision > 0}Комиссия при оплате заказа составит {$this.payCommision}%.{/if}</p>
+    <img id="w1pic" src="/images/w1paycrop.png" /><br />
+    <form method="post" action="https://merchant.w1.ru/checkout/default.aspx" accept-charset="UTF-8">
+        {foreach from=$this.fields item=fval key=fkey}
+        {if is_array($fval)}
+        {foreach from=$fval item=intval}
+        <input type="hidden" name="{$fkey}" value="{$intval}"/>
+        {/foreach}
+        {else}
+        <input type="hidden" name="{$fkey}" value="{$fval}"/>
+        {/if}
+        {/foreach}
+        <input type="submit" id="w1submit" value="Оплатить через кошелек"/>
+    </form>
+{/if}
+
+{if $this.yakassacode}
+    <p>Вы можете оплатить счёт с помощью карты VISA, MasterCard прямо на сайте.<br/><i>(после оплаты не забудьте уведомить организатора с помощью <a href="#notifyaboutpayment">формы</a> ниже).</i></p>
+    {$this.yakassacode}<br/>
+{/if}
+
+<a name="notifyaboutpayment"></a>
+<h4>Уведомление об оплате заказа:</h4>
+<p align="justify">Вы можете сделать перевод организатору например, на карту Сбербанка через Сбер-онлайн, или через терминал сбербанка, либо другим способом.</p>
+<p align="justify">В этом случае, не забудьте сообщить организатору об Вашем переводе с помощью формы.</p>
+<p align="justify">Реквизиты для перевода СБ, уточяйте у организатора закупки: <a href="{link show=vieworg id=$this.org->id}">{$this.org->nickName}</a>{if $this.ts-$this.org->dateLastVisit < 300}<img src="/images/online.png" width="5" height="5" class="onlineimg" />{/if}</p>
+
+<br/>
+<form action="{link do=userpay}" id="user-pay" method="post">
+<input type="hidden" name="oheadid" value="{$this.oheadid}" />
+	<div class="user-pay-table">
+		<dl>
+			<dt>Сумма, руб.:</dt>
+			<dd><input type="text" id="amount" value="{$this.needAmount}" name="amount" maxlength="255" data-validate="validate(required, number, maxlength(12))" /> <i>(копейки через точку)</i></dd>
+		</dl>
+		<dl id="note-dl">
+			<dt>Способ и дата оплаты:<span class="necessary-star">*</span></dt>
+			<dd><textarea name="userInfo" id="userInfo" style="height: 100px; width: 70%;">{if $this.prevPayInfo}{$this.prevPayInfo}{else}Например, перевод от Фамилия Имя с карты СБ ****XXXX от чч.мм.гггг, сделан в чч:мм{/if}</textarea></dd>
+		</dl>
+		<dl id="submit-dl">
+			<dt></dt>
+			<dd><input type="submit" id="submitForm" value="Сообщить о переводе"/></dd>
+		</dl>
+	</div>
+</form>

@@ -1,0 +1,118 @@
+{assign var=this value=$BoardControl}
+
+{literal}
+<script type="text/javascript">
+    $().ready(function()
+    {
+        // добавляем объявление, когда выбраны и тип и категория объявления
+        $('.placenewboardmesage').click(function(e)
+        {
+            var mode = $(this).attr("id");
+            window.location.href = "/index.php?show=placenewadvtoboard&mode="+mode;
+        });
+
+        // тип выбран, осталось выбрать категорию
+        $('.chooseboardcategory').click(function(e)
+        {
+            var mode = $(this).attr("id");
+            window.location.href = "/index.php?show=chooseboardcategory&mode="+mode;
+        });
+
+        // выбрать тип и категорию
+        $('.chooseboardtype').click(function(e)
+        {
+            window.location.href = "/index.php?show=chooseboardtype";
+        });
+
+    });
+</script>
+{/literal}
+
+<!-- если смотрим объявление -->
+{if $this.adObj}
+    {assign var=adId value=$this.adObj->id}
+    {assign var=adStatus value=$this.adObj->status}
+    {assign var=adStatusname value=$this.adStatuses.$adStatus}
+    {assign var=adTypeId value=$this.adObj->typeId}
+    <h1>{$this.preparedTypes.$adTypeId}</h1>
+    <h2>{$this.adObj->name}</h2><br/>
+    {if $this.adObj->price > 0}<h4><b>Цена:</b> {$this.adObj->price|numberformat} р.</h4>{/if}
+    {if $this.actor && $this.adObj->status != 'STATUS_ACTIVE'}<p><b>Статус объявления:</b> {$adStatusname}</p>{/if}
+    <br/><p>{$this.adObj->description|bbcode}</p>
+    <br/><p><b>Добавлено:</b> {$this.adObj->dateCreate|dateformat:"d M Y"}</p>
+    <p><b>Обновлено:</b> {$this.adObj->dateUpdate|dateformat:"d M Y"}</p>
+    <br/>
+    {if $user->isOrg}
+        <p><b>Автор:</b> <a href="{link show=vieworg id=$this.user->id}" style="color: #ff7200;">{$this.user->nickName}</a>{if $this.ts-$this.user->dateLastVisit < 300}<img src="/images/online.png" width="5" height="5" class="onlineimg" />{/if}</p>
+    {else}
+        <p><b>Автор:</b> <a href="{link show=viewuser id=$this.user->id}">{$this.user->nickName}</a>{if $this.ts-$this.user->dateLastVisit < 300}<img src="/images/online.png" width="5" height="5" class="onlineimg" />{/if}</p>
+    {/if}
+{/if}
+
+<!-- список объявлений выбранного типа и категории -->
+{if $this.badList}
+    <h1>Объявления</h1>
+    <ul class="{if $baditem->picFile1}coll-ul{else}coll-ul-no-pic{/if}">
+    {foreach from=$this.badList item=baditem}
+        {assign var=orgId value=$baditem->userId}
+        {assign var=userObj value=$this.userNames.$orgId}
+        <li>
+            <div class="coll-cell">
+                {if $baditem->picFile1}
+                <div class="coll-img">
+                    <a href="{link show=board id=$baditem->id}" title="{$baditem->name}">
+                        {if $baditem->picFile1}<img src="{$baditem->picSrv1}/images/board/small/{$baditem->picFile1}" alt="{$baditem->name}" class="img-thumbnail" />{else}<img src="/images/zhempic.gif" class="img-thumbnail" alt=""/>{/if}
+                    </a>
+                </div>
+                {/if}
+                <div class="coll-desc">
+                    <p class="coll-name"><a href="{link show=board id=$baditem->id}">{$baditem->name}</a></p>
+                    {if $baditem->price > 0}<p class="coll-price">{$baditem->price|numberformat} р.</p>{/if}
+                    <!-- {if $userObj->isOrg}<p class="coll-orgname"><a href="{link show=vieworg id=$orgId}">{$userObj->nickName}</a></p>{else}<p class="coll-orgname"><a href="{link show=vieworg id=$orgId}">{$userObj->nickName}</a></p>{/if} -->
+                </div>
+            </div>
+        </li>
+    {/foreach}
+    </ul>
+{/if}
+
+<!-- здесь список категорий и подкатегорий -->
+{if $this.boardTypes}
+    {if $this.adObj || $this.badList}<br/><h1>Другие объявления</h1>{else}<h1>Объявления</h1>{/if}
+    <ul class="boardtypes-ul">
+    {foreach from=$this.boardTypes item=oneType}
+    {assign var=boardTypeId value=$oneType->id}
+    {assign var=boardTypeAlias value=$oneType->alias}
+        {if $this.preparedCategories}
+            {assign var=boardCats value=$this.preparedCategories.$boardTypeId}
+        {/if}
+        <li class="boardtypes-li"><a href="{link show=board ya=$boardTypeAlias}">{$oneType->name}</a>{if $oneType->cnt > 0} ({$oneType->cnt}){/if}
+            {if $this.preparedCategories && $boardCats}
+            <ul class="boardcats-ul">
+                {foreach from=$boardCats item=oneCat}
+                {assign var=boardCatAlias value=$oneCat->alias}
+                {capture name=aliassumm}{$boardTypeAlias}-{$boardCatAlias}{/capture}
+                {assign var=boardAllAlias value=$smarty.capture.aliassumm}
+                    <li class="boardcats-li"><a href="{link show=board ya=$boardAllAlias}">{$oneCat->name}</a>{if $oneCat->cnt > 0} ({$oneCat->cnt}){/if}</li>
+                {/foreach}
+            </ul>
+            {/if}
+        </li>
+    {/foreach}
+    </ul>
+{/if}
+
+{if $this.typeId && $this.catId && 1 == 0}
+<!-- кнопка "Добавить объявление" (тип и категория уже выбраны) -->
+<button class="placenewboardmesage" id="{$boardAllAlias}">Добавить объявление</button>
+{/if}
+
+{if $this.typeId && !$this.catId && 1 == 0}
+<!-- кнопка "Добавить объявление" (выбран только тип) -->
+<button class="chooseboardcategory" id="{$boardTypeAlias}">Добавить объявление</button>
+{/if}
+
+{if !$this.typeId || 1 == 1}
+<!-- кнопка "Добавить объявление" (выбрать тип и категорию объявления) -->
+<button class="chooseboardtype">Добавить объявление</button>
+{/if}

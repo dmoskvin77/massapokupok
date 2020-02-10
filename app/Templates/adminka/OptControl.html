@@ -1,0 +1,47 @@
+{assign var=this value=$OptControl}
+
+<h2>Данные оптовика</h2>
+
+<table>
+    <tr>
+        <td>ID:</td>
+        <td>{$this.opt->id}</td>
+    </tr>
+
+    <tr>
+        <td>e-mail:</td>
+        <td>{if $opt->login}{$opt->login}{else}{if $opt->vkId}<a href="http://vkontakte.ru/id{$opt->vkId}" target="_blank">{$opt->vkFirstName} {$opt->vkLastName}</a>{else}<b>от организатора</b>{/if}{/if}</td>
+    </tr>
+
+    <tr>
+        <td>Наименование:</td>
+        <td>{$this.opt->name}</td>
+    </tr>
+
+    <tr>
+        <td>Дата регистрации:</td>
+        <td>{$this.org->dateCreate|dateformat:"d M Y"}</td>
+    </tr>
+
+    <tr>
+        <td>Телефон:</td>
+        <td>{$this.opt->phone1}</td>
+    </tr>
+
+    {if $this.opt->phone2}
+    <tr>
+        <td>Доп. телефон:</td>
+        <td>{$this.opt->phone2}</td>
+    </tr>
+    {/if}
+
+    {if $this.org->dateLastVisit}
+    <tr>
+        <td>Заходил на сайт:</td>
+        <td>{$this.org->dateLastVisit|dateformat:"d M Y в H:s"}</td>
+    </tr>
+    {/if}
+
+</table>
+
+

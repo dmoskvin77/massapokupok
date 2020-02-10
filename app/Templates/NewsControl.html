@@ -1,0 +1,16 @@
+{assign var=this value=$NewsControl}
+
+{foreach item=new from=$this.news}
+	{capture name=curmonth}{$new->showDate|dateformat:"F Y"}{/capture}
+	{if $smarty.capture.curmonth!=$smarty.capture.month}<h3>Новости {$smarty.capture.curmonth}</h3><br/>{/if}
+
+    {$new->showDate|dateformat:"d M Y"} <h4>{$new->subject}</h4>
+    <p>{$new->body|nl2br}</p>
+	
+	{capture name=month}{$smarty.capture.curmonth}{/capture}
+{/foreach}
+
+{if $this.total > 1}
+{frontPager total=$this.total per=$this.perPage pageParam='p'}
+{/if}
+

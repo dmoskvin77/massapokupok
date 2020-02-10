@@ -1,0 +1,12 @@
+{assign var=this value=$NewsShortControl}
+
+{if $this.news}
+<div class="side-container">
+<h3>Новости:</h3>
+{foreach item=new from=$this.news}
+	{$new->showDate|dateformat:"d M Y"} <h4>{$new->subject}</h4>
+    <p>{$new->body|nl2br}</p>
+{/foreach}
+<a href="{link show=news}">Показать все новости</a>
+</div>
+{/if}

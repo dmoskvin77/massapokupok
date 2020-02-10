@@ -1,0 +1,30 @@
+{assign var=this value=$ManageCategoriesControl}
+
+<h2>Управление категориями</h2>
+
+<div class="man-con-create">
+	<input type="button" onclick="window.location='{alink show=editcategory}'" value="Добавить категорию" />
+</div>
+
+{if $this.list}
+<br/>
+<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+
+	<tr>
+		<th>Категория</th>
+		<th>Родитель</th>
+		<th>Действие</th>
+	</tr>
+
+	{foreach from=$this.list item=item name=pages}
+	<tr class="{cycle values='color,'}">
+		<td>{$item->name}</td>
+		<td>{if $item->parentId}{$item->parentId}{else}-{/if}</td>
+		<td class="edit">
+			<a href="{alink show=editcategory id=$item->id}">Редактировать</a> | <a href="{alink do=deletecategory id=$item->id}">Удалить</a>
+		</td>
+	</tr>
+	{/foreach}
+
+</table>
+{/if}

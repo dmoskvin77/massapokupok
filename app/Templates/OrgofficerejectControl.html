@@ -1,0 +1,12 @@
+{assign var=this value=$OrgofficerejectControl}
+
+<h4>Причина отказа по доставке в офис:</h4>
+<p>(кратко, не более 120 символов)</p>
+<!-- форма для сообщения -->
+<div id="msgdivsend" class="">
+    <form id="orgofficereject" name="orgofficereject" method="post" action="{link do=orgofficereject}">
+        <input type="hidden" name="officeorderid" value="{$this.officeorderid}" />
+        <textarea id="message" name="message"></textarea><br />
+        <input class="comment-button" type="submit" value="Отказать" />
+    </form>
+</div>

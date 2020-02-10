@@ -1,0 +1,11 @@
+﻿#block-on-center {
+position: absolute;
+top: 50%;
+left: 50%;
+height: 100px;
+width: 360px;
+margin-top: -125px; /* значение равно половине height со знаком минус */
+margin-left: -180px; /* значение равно половине width со знаком минус */
+border: none;
+}
+

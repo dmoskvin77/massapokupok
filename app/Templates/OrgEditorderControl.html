@@ -1,0 +1,67 @@
+{assign var=this value=$OrgEditorderControl}
+{formrestore id="org-editorder"}
+
+{loadscript file='/css/ketchup/jquery.ketchup.css' type='css'}
+{loadscript file='/js/ketchup/jquery.ketchup.all.min.js' type='js'}
+
+{literal}
+<script type="text/javascript">
+	$().ready(function()
+	{
+		$('#org-editorder').ketchup();
+	});
+</script>
+{/literal}
+
+<form action="{link do=orgeditorder}" id="org-editorder" method="post">
+<input type="hidden" name="headid" value="{$this.headid}" />
+<input type="hidden" name="orderid" value="{$this.orderid}" />
+	<div class="org-order-table">
+		<h3>Заказ участника:</h3>
+		<dl id="name-dl">
+			<dt>Название:<span class="necessary-star">*</span></dt>
+			<dd>
+				<input type="text" id="prodName" name="prodName" value="{$this.orlObj->prodName}" maxlength="255" data-validate="validate(required, maxlength(50))" />
+			</dd>
+		</dl>
+		<dl>
+			<dt>Артикул:</dt>
+			<dd>
+				<input type="text" id="prodArt" name="prodArt" value="{$this.orlObj->prodArt}" maxlength="255" data-validate="validate(maxlength(20))" />
+			</dd>
+		</dl>
+		<dl>
+			<dt>Цена:<span class="necessary-star">*</span></dt>
+			<dd>
+				<input type="text" id="optPrice" name="optPrice" value="{$this.orlObj->optPrice}" maxlength="14" data-validate="validate(required, number, maxlength(14))" />
+			</dd>
+		</dl>
+
+		{if !$this.zlObj || $this.zlObj->minValue}
+			<dl>
+				<dt>Кол-во:<span class="necessary-star">*</span></dt>
+				<dd>
+					<input type="text" id="count" name="count" value="{$this.orlObj->count}" maxlength="11" data-validate="validate(required, digits, max(10))" />
+				</dd>
+			</dl>
+		{/if}
+
+		<dl>
+			<dt>Размер:</dt>
+			<dd><input type="text" id="size" name="size" value="{$this.orlObj->size}" maxlength="20" data-validate="validate(maxlength(20))" /></dd>
+		</dl>
+		<dl>
+			<dt>Цвет:</dt>
+			<dd><input type="text" id="color" name="color" value="{$this.orlObj->color}" maxlength="20" data-validate="validate(maxlength(20))" /></dd>
+		</dl>
+
+		<dl id="note-dl">
+			<dt>Комментарий:</dt>
+			<dd><textarea name="comment" id="comment" style="height: 100px; width: 70%;">{$this.orlObj->comment}</textarea></dd>
+		</dl>
+		<dl id="submit-dl">
+			<dt></dt>
+			<dd><input type="submit" id="submitForm" value="Сохранить"/></dd>
+		</dl>
+	</div>
+</form>

@@ -1,0 +1,19 @@
+{assign var=this value=$SearchControl}
+
+<h4>Результаты поиска по запросу:</h4>
+<p>{$this.q}</p>
+
+{if $this.users}
+<br/>
+<ul style="list-style: none;">
+    {foreach from=$this.users item=user}
+        {if $user->isOrg}
+            <li><a href="{link show=vieworg id=$user->id}" style="color: #ff7200;">{$user->nickName}</a>{if $this.ts-$user->dateLastVisit < 300}<img src="/images/online.png" width="5" height="5" class="onlineimg" />{/if}</li>
+        {else}
+            <li><a href="{link show=viewuser id=$user->id}">{$user->nickName}</a>{if $this.ts-$user->dateLastVisit < 300}<img src="/images/online.png" width="5" height="5" class="onlineimg" />{/if}</li>
+        {/if}
+    {/foreach}
+</ul>
+{else}
+    <b>Нет результатов, попробуйте другой поисковый запрос</b>
+{/if}

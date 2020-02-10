@@ -1,0 +1,5 @@
+{assign var=this value=$OrgAreaControl}
+
+<h3>{$this.hellotimeday}{if $this.actor->firstName || $this.actor->secondName},{/if}{if $this.actor->firstName} {$this.actor->firstName}{/if}{if $this.actor->secondName} {$this.actor->secondName}{/if}!</h3>
+{component name="NewsShort"}
+<h4>Приятной работы!</h4>

@@ -1,0 +1,70 @@
+{assign var=this value=$OrgaddmeetingControl}
+{formrestore id="form-meeting"}
+
+{loadscript file='/css/ketchup/jquery.ketchup.css' type='css'}
+{loadscript file='/js/ketchup/jquery.ketchup.all.min.js' type='js'}
+
+{loadscript file='/js/datapicker/jquery.dynDateTime.min.js' type='js'}
+{loadscript file='/js/datapicker/calendar-en.min.js' type='js'}
+{loadscript file='/js/datapicker/calendar-ru.min.js' type='js'}
+
+{loadscript file='/css/datapicker/calendar-green.css' type='css'}
+
+{literal}
+<script type="text/javascript">
+    $().ready(function()
+    {
+        // календари
+        $("#startTs").dynDateTime({
+            showsTime: true,
+            ifFormat: "%d.%m.%Y %H:%M",
+            timeFormat: "24",
+            firstDay: 1,
+            step: 1
+        });
+
+        $("#finishTs").dynDateTime({
+            showsTime: true,
+            ifFormat: "%d.%m.%Y %H:%M",
+            timeFormat: "24",
+            firstDay: 1,
+            step: 1
+        });
+
+        $('#form-meeting').ketchup();
+
+    });
+</script>
+{/literal}
+
+<h4>Назначение встречи для раздачи закупки</h4>
+<p><a href="{link show=orgviewzakupka headid=$this.zakObj->id mode=meeting}">{$this.zakObj->name}</a></p>
+<p>Назначайте одну встречу на каждый временной интервал!</p>
+
+<form id="form" action="{link do=orgaddmeeting}" id="form-meeting" method="post" style="padding-bottom: 150px;">
+    <input type="hidden" name="headid" value="{$this.zakObj->id}" />
+
+    <dl>
+        <dt>Дата и время начала встречи:</dt>
+        <dd><input type="text" name="startTs" id="startTs" data-validate="validate(required, maxlength(30))" /></dd>
+    </dl>
+
+    <dl>
+        <dt>Дата и время окончания встречи:</dt>
+        <dd><input type="text" name="finishTs" id="finishTs" data-validate="validate(required, maxlength(30))" /></dd>
+    </dl>
+
+    <dl>
+        <dt>Лимит по кол-ву участников (0 - без ограничений):</dt>
+        <dd><input type="text" name="userLimit" maxlength="10" value="0" data-validate="validate(digits, range(0, 10000), maxlength(50))" /></dd>
+    </dl>
+
+    <dl>
+        <dt><u>ГДЕ</u> будет проходить встреча:</dt>
+        <dd><textarea name="message" rows="8" cols="50" data-validate="validate(required)"></textarea></dd>
+    </dl>
+
+    <dl>
+        <dd><input id="submitMeeting" type="submit" onclick="return confirm('Точно уверены? Откатить назначенную встречу будет нельзя!');" value="Назначить встречу"/></dd>
+    </dl>
+</form>

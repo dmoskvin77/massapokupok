@@ -1,0 +1,29 @@
+{assign var=this value=$CategorymenuControl}
+
+{if $this.all}
+    <div class="leftmenuttl"><a href="/zakupki" title="Закупки сайт покупок {$this.city}">Закупки</a></div>
+	<ul class="nav nav-stacked" id="sidebar">
+    {foreach item=cline from=$this.all}
+		{if $cline->level == 1}<li><a href="{link show=zakupki cat=$cline->id}" title="{$cline->name}" {if $this.cat == $cline->id}class="active-navlink"{/if}>{$cline->name}</a></li>{/if}
+		{assign var=lvlshown value=0}
+		{foreach item=clinelvl2 from=$this.all}
+			{if $clinelvl2->parentId == $cline->id && $clinelvl2->parentId > 0}
+				{if $lvlshown == 0}
+					<li class="">
+						<ul class="nav-subcat">
+					{assign var=lvlshown value=1}
+				{/if}
+				<li><a href="{link show=zakupki cat=$clinelvl2->id}" title="{$clinelvl2->name}" {if $this.cat == $clinelvl2->id}class="active-navlink"{/if}>{$clinelvl2->name}</a></li>
+			{/if}
+		{/foreach}
+		{if $lvlshown == 1}
+				</ul>
+			</li>
+		{/if}
+    {/foreach}
+        <li><a href="{link show=zakupki mode=done}" title="Набранные" {if $this.mode == 'done'}class="active-navlink"{/if}><i>Набранные</i></a></li>
+		<li><a href="{link show=zakupki mode=voting}" title="На голосовании" {if $this.mode == 'voting'}class="active-navlink"{/if}><i>На голосовании</i></a></li>
+    </ul>
+{else}
+	<p>Не заданы категории</p>
+{/if}

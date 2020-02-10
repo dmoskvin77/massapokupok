@@ -1,0 +1,55 @@
+{assign var=this value=$PlacenewadvtoboardControl}
+{formrestore id="user-addad"}
+
+{loadscript file='/css/ketchup/jquery.ketchup.css' type='css'}
+{loadscript file='/js/ketchup/jquery.ketchup.all.min.js' type='js'}
+
+{literal}
+<script type="text/javascript">
+	$().ready(function()
+	{
+		$('#user-addad').ketchup();
+	});
+</script>
+{/literal}
+
+<form action="{link do=useraddad}" id="user-addad" method="post">
+
+	<div class="user-ad-table">
+
+		<h3>Ваше объявление:</h3>
+
+		<dl id="name-dl">
+			<dt>Название:<span class="necessary-star">*</span></dt>
+			<dd>
+				<input type="text" id="prodName" name="prodName" value="{$this.orlObj->prodName}" maxlength="255" data-validate="validate(required, maxlength(50))" />
+			</dd>
+		</dl>
+
+		<dl>
+			<dt>Артикул:</dt>
+			<dd>
+				<input type="text" id="prodArt" name="prodArt" value="{$this.orlObj->prodArt}" maxlength="255" data-validate="validate(maxlength(20))" />
+			</dd>
+		</dl>
+
+		<dl>
+			<dt>Цена:<span class="necessary-star">*</span></dt>
+			<dd>
+				<input type="text" id="optPrice" name="optPrice" value="{$this.orlObj->optPrice}" maxlength="14" data-validate="validate(required, number, maxlength(14))" />
+			</dd>
+		</dl>
+
+		<dl id="note-dl">
+			<dt>Комментарий:</dt>
+			<dd><textarea name="comment" id="comment" style="height: 100px; width: 70%;"></textarea></dd>
+		</dl>
+
+		<dl id="submit-dl">
+			<dt></dt>
+			<dd><input type="submit" id="submitForm" value="Записать" /></dd>
+		</dl>
+
+	</div>
+
+</form>

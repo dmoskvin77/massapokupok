@@ -1,0 +1,62 @@
+{assign var=this value=$EditcontentControl}
+{formrestore id="edit-content"}
+
+{loadscript file='/css/ketchup/jquery.ketchup.css' type='css'}
+{loadscript file='/js/ketchup/jquery.ketchup.all.min.js' type='js'}
+
+{loadscript file='/js/fckeditor/jquery.FCKEditor.js' type='js'}
+{loadscript file='/js/fckeditor/jquery.form.js' type='js'}
+
+{literal}
+<script type="text/javascript">
+	$().ready(function()
+	{
+		$('#edit-content').ketchup();
+		$('#content').fck({path: '/fckeditor/'});
+	});
+</script>
+{/literal}
+
+<h2>Создание/редактирование страницы</h2>
+
+<form id="edit-content" method="post" action="{alink do=savecontent}">
+	<input type="hidden" name="id" value="{$this.content->id}"/>
+	<dl>
+		<dt>Заголовок:</dt><dd><input type="text" data-validate="validate(required, maxlength(255))" name="title" value="{$this.content->title}"/></dd>
+	</dl>
+	<dl>
+		<dt>Meta title:</dt><dd><input type="text" data-validate="validate(required, maxlength(255))" name="pageTitle" value="{$this.content->pageTitle}"/></dd>
+	</dl>
+	<dl>
+		<dt>Meta description:</dt><dd><input type="text" data-validate="validate(required)" name="pageDesc" value="{$this.content->pageDesc}"/></dd>
+	</dl>
+	<dl>
+		<dt>Meta keys:</dt><dd><input type="text" data-validate="validate(required)" name="pageKeys" value="{$this.content->pageKeys}"/></dd>
+	</dl>
+	<dl>
+		<dt>Псевдоним:</dt><dd><input type="text" id="alias" data-validate="validate(required, username, maxlength(255))" name="alias" value="{$this.content->alias}"/></dd>
+	</dl>
+	<dl>
+		<dt>Положение в меню:</dt>
+		<dd>
+			<select name="menu">
+			 {html_options options=$this.menuList selected=$this.content->menu}
+			</select>
+		</dd>
+	</dl>
+
+	<p><b>Разметка страницы:</b></p>
+	<textarea name="text" id="content" name="text">{$this.content->text}</textarea>
+	<p><!-- --></p>
+	<dl>
+		<dt>Статус:</dt>
+		<dd>
+			<select name="status">
+			 {html_options options=$this.statusList selected=$this.content->status}
+			</select>
+		</dd>
+	</dl>
+
+	<input id="submitContent" type="submit" value="Сохранить"/>
+
+</form>

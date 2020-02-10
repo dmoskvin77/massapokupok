@@ -1,0 +1,33 @@
+{assign var=this value=$ManagebroadcastControl}
+
+<h2>Модерация рассылок</h2>
+
+{if $this.broadcastlist}
+
+	<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+		<tr>
+			<th>Дата</th>
+			<th>Пользователь</th>
+			<th>Сообщение</th>
+			<th>Действия</th>
+		</tr>
+		{foreach item=broadcast from=$this.broadcastlist}
+        {assign var=userId value=$broadcast->orgId}
+        {assign var=userObj value=$this.users.$userId}
+
+			<tr class="{cycle values='color,'}">
+				<td>{$broadcast->dateCreate|dateformat:"d M Y H:i"}</td>
+				<td><a href="{alink show=user id=$userObj->id}">{$userObj->nickName}</a></td>
+				<td>{$broadcast->message}</td>
+				<td>
+					<a href="{alink do=aprovebroadcast id=$broadcast->id}">Одобрить</a> | <a href="{alink do=removebroadcast id=$broadcast->id}">Отклонить</a>
+				</td>
+			</tr>
+		{/foreach}
+	</table>
+
+{else}
+
+	<h3>Нет рассылок, ожидающих модерацию</h3>
+
+{/if}

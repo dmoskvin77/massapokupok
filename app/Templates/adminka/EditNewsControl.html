@@ -1,0 +1,22 @@
+{assign var=this value=$EditNewsControl}
+
+<h2>{if $this.news}Редактирование новости{else}Создание новости{/if}</h2>
+
+<form id="form" action="{alink do=savenews}" method="post">
+	<input type="hidden" name="newsId" value="{$this.news->id}" />
+	<dl>
+		<dt>Дата:</dt>
+		<dd><input type="text" name="dateFrom" id="dateFrom" value="{$this.news->showDate|dateformat}"/></dd>
+	</dl>
+	<dl>
+		<dt>Заголовок:</dt>
+		<dd><input type="text" name="subject" maxlength="255" value="{$this.news->subject}"/></dd>
+	</dl>
+	<dl>
+		<dt>Текст:</dt>
+		<dd><textarea name="body" rows="8" cols="50">{$this.news->body}</textarea></dd>
+	</dl>
+	<dl>
+		<dd><input id="submitNews" type="submit" value="Сохранить"/></dd>
+	</dl>
+</form>

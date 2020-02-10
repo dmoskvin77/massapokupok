@@ -1,0 +1,34 @@
+{assign var=this value=$OrgpaybackControl}
+
+{formrestore id="user-pay"}
+
+{loadscript file='/css/ketchup/jquery.ketchup.css' type='css'}
+{loadscript file='/js/ketchup/jquery.ketchup.all.min.js' type='js'}
+
+{literal}
+<script type="text/javascript">
+	$().ready(function()
+	{
+		$('#user-pay').ketchup();
+	});
+
+</script>
+{/literal}
+
+<form action="{link do=orgpayback}" id="user-pay" method="post">
+<input type="hidden" name="oheadid" value="{$this.oheadid}" />
+	<div class="user-pay-table">
+		<dl>
+			<dt>Сумма, руб.:</dt>
+			<dd><input type="text" id="amount" value="{$this.overAmount}" name="amount" maxlength="255" data-validate="validate(required, number, maxlength(12))" /></dd>
+		</dl>
+		<dl id="note-dl">
+			<dt>Способ и дата возврата:<span class="necessary-star">*</span></dt>
+			<dd><textarea name="userInfo" id="userInfo" style="height: 100px; width: 70%;">{if $this.prevPayInfo}{$this.prevPayInfo}{else}Возврат от Фамилия Имя с карты СБ ****XXXX от чч.мм.гггг, сделан в чч:мм{/if}</textarea></dd>
+		</dl>
+		<dl id="submit-dl">
+			<dt></dt>
+			<dd><input type="submit" id="submitForm" value="Сообщить о возврате"/></dd>
+		</dl>
+	</div>
+</form>

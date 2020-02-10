@@ -1,0 +1,5 @@
+{assign var=this value=$UserAreaControl}
+
+<h3>{$this.hellotimeday}{if $actor->firstName || $actor->secondName},{/if}{if $actor->firstName} {$actor->firstName}{/if}{if $actor->secondName} {$actor->secondName}{/if}!</h3>
+{component name="NewsShort"}
+<h4>Приятных покупок!</h4>

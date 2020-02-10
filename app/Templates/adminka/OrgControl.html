@@ -1,0 +1,60 @@
+{assign var=this value=$OrgControl}
+
+<h2>Данные пользователя</h2>
+
+<table>
+    <tr>
+        <td>ID:</td>
+        <td>{$this.org->id}</td>
+    </tr>
+
+    <tr>
+        <td>e-mail:</td>
+        <td>{if $this.org->login}{$this.org->login}{else}{if $this.org->vkId}<a href="http://vkontakte.ru/id{$this.org->vkId}" target="_blank">{$this.org->vkFirstName} {$this.org->vkLastName}</a>{else}<b>не идентифицирован</b>{/if}{/if}</td>
+    </tr>
+
+    <tr>
+        <td>Имя:</td>
+        <td>{$this.org->firstName}</td>
+    </tr>
+
+    <tr>
+        <td>Фамилия:</td>
+        <td>{$this.org->lastName}</td>
+    </tr>
+
+    <tr>
+        <td>Отчество:</td>
+        <td>{$this.org->secondName}</td>
+    </tr>
+
+    <tr>
+        <td>Организация:</td>
+        <td>{$this.org->name}</td>
+    </tr>
+
+    <tr>
+        <td>Дата регистрации:</td>
+        <td>{$this.org->dateCreate|dateformat:"d M Y"}</td>
+    </tr>
+
+    <tr>
+        <td>Телефон:</td>
+        <td>{$this.org->phone1}</td>
+    </tr>
+
+    {if $this.org->phone2}
+    <tr>
+        <td>Доп. телефон:</td>
+        <td>{$this.org->phone2}</td>
+    </tr>
+    {/if}
+
+    {if $this.org->dateLastVisit}
+    <tr>
+        <td>Заходил на сайт:</td>
+        <td>{$this.org->dateLastVisit|dateformat:"d M Y в H:s"}</td>
+    </tr>
+    {/if}
+
+</table>

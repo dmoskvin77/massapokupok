@@ -1,0 +1,96 @@
+/* админские стили сайта */
+
+table {
+font-family: Verdana;
+font-weight: normal;
+font-size: 11px;
+color: #404040;
+width: 80%;
+background-color: #fafafa;
+border: 1px #aaaaaa solid;
+border-collapse: collapse;
+border-spacing: 0px;
+margin-top: 10px;
+}
+
+
+table th {
+border-bottom: 2px solid #aaaaaa;
+background-color: #eeeeee;
+text-align: center;
+font-family: Verdana;
+padding: 10px;
+font-weight: bold;
+font-size: 11px;
+color: #404040;
+}
+
+
+table td {
+border-bottom: 1px dotted #aaaaaa;
+border-left: 1px dotted #aaaaaa;
+font-family: Verdana, sans-serif, Arial;
+font-weight: normal;
+font-size: 11px;
+color: #404040;
+background-color: white;
+text-align: left;
+padding: 5px;
+}
+
+.adminka-menu-ul { list-style: none; margin-left: -40px; }
+.adminka-menu-ul li { height: 25px; }
+
+.list { width: 80%; }
+
+.man-con-create { padding-top: 10px; padding-bottom: 10px; }
+
+#edit-content {  }
+#edit-content dl {  }
+#edit-content dl dt { float: left; padding-right: 5px; text-align: right; width: 150px; }
+#edit-content dl dd {  }
+#edit-content input { width: 500px; }
+#edit-content #alias { width: 150px; }
+#edit-content select { width: 153px; }
+#edit-content textarea { margin-left: 154px; width: 500px; height: 300px; }
+#edit-content #submitContent { margin-top: 10px; margin-left: 154px; width: 120px; }
+
+#edit-hint {  }
+#edit-hint dl {  }
+#edit-hint dl dt { float: left; padding-right: 5px; text-align: right; width: 150px; }
+#edit-hint dl dd {  }
+#edit-hint input { width: 500px; }
+#edit-hint #alias { width: 150px; }
+#edit-hint select { width: 153px; }
+#edit-hint textarea { margin-left: 154px; width: 500px; height: 300px; }
+#edit-hint #submitHint { margin-top: 10px; margin-left: 154px; width: 120px; }
+.alert {
+	color:#555;
+	border-radius:10px;
+	font-family:Tahoma,Geneva,Arial,sans-serif;font-size:14px;
+	padding:10px 36px;
+	margin: auto;
+	margin-top: 60px;
+}
+.alert span {
+	font-weight:bold;
+	text-transform:uppercase;
+}
+.alert-danger {
+	background:#ffecec;
+	width: 400px;
+	border:1px solid #f5aca6;
+}
+
+.success {
+	background:#e9ffd9 url('/images/success.png') no-repeat 10px 50%;
+	border:1px solid #a6ca8a;
+}
+.warning {
+	background:#fff8c4 url('/images/warning.png') no-repeat 10px 50%;
+	border:1px solid #f2c779;
+}
+.notice {
+	background:#e3f7fc url('/images/notice.png') no-repeat 10px 50%;
+	border:1px solid #8ed9f6;
+}

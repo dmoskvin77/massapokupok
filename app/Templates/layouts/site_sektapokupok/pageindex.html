@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">
+<head>
+	<meta http-equiv="Content-Type" content="text/xml; charset=utf-8" />
+	<title>{if $pageTitle}{$pageTitle}{/if}{if $p > 1} - Страница {$p}{/if}</title>
+	<meta name="description" content="{$pageDesc}" />
+	<meta name="keywords" content="{$pageKeys}" />
+	<meta name="robots" content="index,follow,noodp,noydir" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+	<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/css/font-awesome.min.css" rel="stylesheet">
+	<link href="/css/docs.min.css" rel="stylesheet">
+	<link href="/css/half-slider.css" rel="stylesheet">
+	<!--[if lt IE 9]>
+	<script src="/js/html5.js"></script>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	<link href="/css{if $ownerSiteId && $tplFolder}/{$tplFolder}{/if}/styles.css" rel="stylesheet">
+	<script src="/js/jquery.min.js"></script>
+
+</head>
+<body>
+
+<!-- Begin Body -->
+<div class="container">
+
+    <div class="logobar">
+        {component name="Prologo"}
+        <div class="pull-right">
+            <form class="navbar-form" role="search" method="get" action="{link show=search}">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Поиск участника" name="q">
+                    <div class="input-group-btn">
+                        <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="navbar">
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="navbar-header">
+            </div>
+            <div class="navbar-collapse" id="mp-top-menu">
+                {component name="Topmenu"}
+            </div>
+        </nav>
+    </div>
+
+	<div class="row">
+  			<div class="col-md-3" id="leftCol">
+				<div class="well affix-top" id="categorymenu">
+					{component name="Categorymenu"}
+  				</div>
+
+                {if $vkGroupId && !$okGroupId}
+                <div class="vkcontainer">
+                    <div class="vkcontainerinternal">
+                    {literal}
+                    <script type="text/javascript" src="//vk.com/js/api/openapi.js?116"></script>
+                    <div id="vk_groups"></div>
+                    <script type="text/javascript">
+                        VK.Widgets.Group("vk_groups", {mode: 0, width: "183", height: "300", color1: 'ffffff', color2: '333', color3: 'aee577'}, {/literal}{$vkGroupId}{literal});
+                    </script>
+                    {/literal}
+                    </div>
+                </div>
+                {/if}
+
+      		</div>
+
+      	<div class="col-md-9" id="maincontainer">
+		{component name="Tabmenu"}
+		{displayerror}
+        <h1>{$pageTitle}</h1>
+        <!-- Half Page Image Background Carousel Header -->
+        <div id="myCarousel" class="carousel slide">
+            <!-- Indicators -->
+            <ol class="carousel-indicators">
+                <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#myCarousel" data-slide-to="1"></li>
+                <li data-target="#myCarousel" data-slide-to="2"></li>
+            </ol>
+            <!-- Wrapper for Slides -->
+            <div class="carousel-inner">
+                <div class="item active">
+                    <!-- Set the first background image using inline CSS below. -->
+                    <div class="fill" style="background-image:url('/images/slides/slide1_{$slr1}.jpg');"></div>
+                    <div class="carousel-caption">
+                        <h2>Сделано с любовью к людям</h2>
+                    </div>
+                </div>
+                <div class="item">
+                    <!-- Set the second background image using inline CSS below. -->
+                    <div class="fill" style="background-image:url('/images/slides/slide2_{$slr2}.jpg');"></div>
+                    <div class="carousel-caption">
+                        <h2>Позволяет хорошо экономить</h2>
+                    </div>
+                </div>
+                <div class="item">
+                    <!-- Set the third background image using inline CSS below. -->
+                    <div class="fill" style="background-image:url('/images/slides/slide3_{$slr3}.jpg');"></div>
+                    <div class="carousel-caption">
+                        <h2>Покупка у оптовиков группой участников</h2>
+                    </div>
+                </div>
+            </div>
+            <!-- Controls -->
+            <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+                <span class="icon-prev"></span>
+            </a>
+            <a class="right carousel-control" href="#myCarousel" data-slide="next">
+                <span class="icon-next"></span>
+            </a>
+        </div>
+
+        <br/>
+        {if $showUsers}{component name="Whoisonline"}{/if}
+        {capture name=predator}{component name="PageEmbabed" alias="predator"}{/capture}
+        {if $smarty.capture.predator && $smarty.capture.predator != ''}
+        <div class="well well-lg predator-representing" style="text-align: justify;">
+            {$smarty.capture.predator}
+        </div>
+        {/if}
+
+        {if $okGroupId}
+        <div class="" style="text-align: justify; margin-top: 10px; overflow: hidden;">
+            {if $vkGroupId}<div class="left-side">{/if}
+            {literal}
+            <script type="text/javascript" src="//vk.com/js/api/openapi.js?116"></script>
+            <div id="vk_groups"></div>
+            <script type="text/javascript">
+                VK.Widgets.Group("vk_groups", {mode: 0, width: "300", height: "350", color1: 'ffffff', color2: '333', color3: 'aee577'}, {/literal}{$vkGroupId}{literal});
+            </script>
+            {/literal}
+            {if $vkGroupId}</div>{/if}
+
+            {if $vkGroupId}<div class="left-side">{/if}
+            {literal}
+            <div id="ok_group_widget"></div>
+            <script>
+                !function (d, id, did, st) {
+                    var js = d.createElement("script");
+                    js.src = "http://connect.ok.ru/connect.js";
+                    js.onload = js.onreadystatechange = function () {
+                        if (!this.readyState || this.readyState == "loaded" || this.readyState == "complete") {
+                            if (!this.executed) {
+                                this.executed = true;
+                                setTimeout(function () {
+                                    OK.CONNECT.insertGroupWidget(id,did,st);
+                                }, 0);
+                            }
+                        }}
+                    d.documentElement.appendChild(js);
+                }(document,"ok_group_widget","{/literal}{$okGroupId}{literal}","{width:300,height:350}");
+            </script>
+            {/literal}
+            {if $vkGroupId}</div>{/if}
+        </div>
+        {/if}
+
+        {component name="Menupagesbottom"}
+        {component name="NewsShort"}
+		</div>
+  	</div>
+</div>
+
+<div class="panel-footer navbar-fixed-bottom">
+	<p style='float: left;'>{copyright}</p>
+    {control name=Webstatsektapokupok}
+</div>
+
+<!-- script references -->
+<script src="/bootstrap/js/bootstrap.min.js"></script>
+<script src="/js/docs.min.js"></script>
+<script src="/js/ie10-viewport-bug-workaround.js"></script>
+<script src="/js{if $ownerSiteId && $tplFolder}/{$tplFolder}{/if}/scripts.js"></script>
+
+{literal}
+<script type="text/javascript">
+    $().ready(function() {
+        $('.carousel').carousel({
+            interval: 6000 //changes the speed
+        });
+    });
+</script>
+{/literal}
+
+<div style="display: none;" class="reserveddiv"></div>
+
+</body>
+</html>

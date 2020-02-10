@@ -1,0 +1,9 @@
+{assign var=this value=$ViewOfficeControl}
+
+{if $this.office}
+	<h3>Информация об офисе</h3>
+	<p><b>Название офиса: </b>{$this.office->name}</p>
+	<p><b>Адрес офиса: </b>{$this.office->address|nl2br}</p>
+	<p><b>Расписание работы: </b>{$this.office->schedule|nl2br}</p>
+	<p><b>Состояние: </b>{$this.office->status == 'STATUS_ENABLED'}работает{else}закрыт{/if}</p>
+{/if}

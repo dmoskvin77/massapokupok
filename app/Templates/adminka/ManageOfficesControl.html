@@ -1,0 +1,34 @@
+{assign var=this value=$ManageOfficesControl}
+
+<h2>Управление офисами раздач</h2>
+
+<div class="create">
+	<input type="button" onclick="window.location='{alink show=editoffice}'" value="Добавить офис" />
+</div>
+
+{if $this.offices}
+<br/>
+<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+	<tr>
+		<th>ID</th>
+		<th>Название</th>
+		<th>Статус</th>
+        <th>Стоимость доставки</th>
+		<th>Действие</th>
+	</tr>
+	{foreach item=office from=$this.offices}
+		<tr class="{cycle values='color,'}">
+			<td>{$office->id}</td>
+			<td>{$office->name}</td>
+			<td>{if $office->status == 'STATUS_ENABLED'}Работает{else}Закрыт{/if}</td>
+            <td>{if $office->price > 0}{$office->price|round2}{else}-{/if}</td>
+			<td>
+				<a href="{alink show=editoffice id=$office->id}">Редактировать</a> |
+                {if $office->status == 'STATUS_ENABLED'}<a href="{alink do=deactivateoffice id=$office->id}">Выключить</a>{else}<a href="{alink do=activateoffice id=$office->id}">Включить</a>{/if}
+			</td>
+		</tr>
+	{/foreach}
+</table>
+
+{pager total=$this.total per=$this.perPage}
+{/if}

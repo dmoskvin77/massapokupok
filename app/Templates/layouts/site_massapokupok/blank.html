@@ -1,0 +1,22 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ru">
+<head>
+	<meta http-equiv="Content-Type" content="text/xml; charset=utf-8" />
+	<title>{if $pageTitle}{$pageTitle}{/if}{if $p > 1} - Страница {$p}{/if}</title>
+	<meta name="description" content="{$pageDesc}" />
+	<meta name="keywords" content="{$pageKeys}" />
+	<meta name="robots" content="index,follow,noodp,noydir" />
+	{loadscript file='/css/main.css' type='css' media='all'}
+	{loadscript file='/css/print.css' type='css' media='print'}
+	<!--[if lte IE 7]>{loadscript file='/css/ie.css' type='css'}<![endif]-->
+	<!--[if lte IE 6]>{loadscript file='/css/ie6.css' type='css'}<![endif]-->
+	<link rel="icon" href="/favicon.ico" type="image/x-icon" />
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+	<link rel="alternate" type="application/rss+xml" title="rss новости" href="/rss" />
+	{loadscript file='/js/jquery.js' type='js'}
+	<script src="http://vkontakte.ru/js/api/openapi.js" type="text/javascript"></script>
+</head>
+<body>
+	{include file=$CURRENT_CONTROL_TEMPLATE}
+</body>
+</html>

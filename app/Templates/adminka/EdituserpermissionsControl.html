@@ -1,0 +1,31 @@
+{assign var=this value=$EdituserpermissionsControl}
+
+<h2>Редактирование прав пользователя</h2>
+
+<form id="form" action="{alink do=saveuserpermissions}" method="post">
+	<input type="hidden" name="userid" value="{$this.user->id}" />
+	<dl>
+		<dt>Права:</dt>
+		<dd>
+			<select name="permission">
+			{foreach from=$this.permissionstypes item=onetypeval key=onetypekey}
+				<option value="{$onetypekey}">{$onetypeval}</option>
+			{/foreach}
+			</select>
+		</dd>
+	</dl>
+	<dl>
+		<dd><input id="submitNews" type="submit" value="Добавить"/></dd>
+	</dl>
+</form>
+
+
+{if $this.permissions}
+<h4>Имеющиеся права пользователя:</h4>
+<ul>
+	{foreach from=$this.permissions item=permission}
+	{assign var=permtype value=$permission->type}
+	<li>{$this.permissionstypes.$permtype} <a href="{alink do=removeuserpermissions userid=$this.user->id permission=$permtype}">Удалить</a></li>
+	{/foreach}
+</ul>
+{/if}

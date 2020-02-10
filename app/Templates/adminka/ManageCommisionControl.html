@@ -1,0 +1,50 @@
+{assign var=this value=$ManageCommisionControl}
+
+<h2>Управление комиссией</h2>
+
+{if $this.list}
+<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+
+	<tr>
+		<th>ID</th>
+        <th>Статус</th>
+		<th>Организатор</th>
+        <th>Закупка</th>
+        <th>Дата выставления</th>
+        <th>Ожидается</th>
+        <th>Оплачено</th>
+        <th>Информация</th>
+		<th>Действие</th>
+	</tr>
+
+	{foreach from=$this.list item=item}
+
+    {assign var=orgid value=$item->orgId}
+    {assign var=scid value=$item->id}
+    {assign var=zakid value=$item->headId}
+
+    {assign var=scstatus value=$item->status}
+    {assign var=sctype value=$item->type}
+    {assign var=scway value=$item->way}
+
+    {assign var=oneZakObj value=$this.zheads.$zakid}
+
+	<tr class="{cycle values='color,'}">
+		<td>{$item->id}</td>
+        <td>{if $item->status == 'STATUS_NEW' && (!$item->payAmount || $item->payAmount == 0)}новый{else}{$this.scStatuses.$scstatus}{/if}</td>
+		<td><a href="/vieworg/id/{$orgid}" target="_blank">{$this.orgList.$orgid->nickName}</a></td>
+        <td><a href="/viewcollection/id/{$item->headId}" target="_blank">ID {$item->headId}</a></td>
+        <td>{$item->dateCreate|dateformat:"d M Y"}</td>
+        <td>{$item->needAmount|round2}</td>
+        <td>{$item->payAmount|round2}</td>
+        <td>{$item->userInfo}</td>
+		<td class="edit">
+            {if $item->status == 'STATUS_NEW' && $item->payAmount > 0}<a href="{alink do=acceptcommission id=$item->id}">Подтв-ть</a>{/if}
+		</td>
+	</tr>
+	{/foreach}
+
+</table>
+{else}
+    <h4>Список новых оплат пуст</h4>
+{/if}

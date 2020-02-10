@@ -1,0 +1,65 @@
+{assign var=this value=$OrgimportzakupkaprocessControl}
+
+{literal}
+<script type="text/javascript">
+    $().ready(function()
+    {
+        $('.codetype').change(function(e)
+        {
+            if ($(this).attr('value') == '0')
+            {
+                // кодировка windows
+                $('.rowutf8').hide();
+                $('.rowwin').show();
+            }
+            else
+            {
+                $('.rowwin').hide();
+                $('.rowutf8').show();
+            }
+
+        });
+
+
+    });
+
+</script>
+{/literal}
+
+<h4>Загрузка рядов из файла в закупку <a href="{link show=orgviewzakupka headid=$this.zakObj->id}" target="_blank">{$this.zakObj->name}</a>:</h4>
+
+{if $this.countLines > 0}
+<p>Загружено строк из файла: <b>{$this.countLines}</b></p>
+
+{capture name=chooseoptions}<option value="0">---</option>{foreach from=$this.loadArray item=optionVal key=optionKey}<option value="{$optionKey}">{$optionVal}</option>{/foreach}{/capture}
+<form action="{link do=orgimportzakupkaprocess}" method="post">
+<input type="hidden" name="headid" value="{$this.zakObj->id}" />
+
+    <h4>Выбрать кодировку файла:</h4>
+    <input type="radio" name="codetype" class="codetype" value="0" id="codetype-0" checked="checked"> <label for="codetype-0">win-1251</label><br/>
+    <input type="radio" name="codetype" class="codetype" value="1" id="codetype-1"> <label for="codetype-1">utf8</label><br/><br/>
+
+    <h4>Выберите соответствие загруженных данных:</h4>
+    <table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+        <tr>
+            <th style="text-align: center;">Содержимое</th>
+            <th style="text-align: center;">Тип (надо выбрать!)</th>
+        </tr>
+
+        {if $this.oneLine.field1}<tr><td class="rowwin">{$this.oneLine.field1|basedecode|wintoutf|truncate:120:"...":true}</td><td class="rowutf8" style="display: none;">{$this.oneLine.field1|basedecode|truncate:120:"...":true}</td><td style="text-align: center;"><select name="field1">{$smarty.capture.chooseoptions}</select></td></tr>{/if}
+        {if $this.oneLine.field2}<tr><td class="rowwin">{$this.oneLine.field2|basedecode|wintoutf|truncate:120:"...":true}</td><td class="rowutf8" style="display: none;">{$this.oneLine.field2|basedecode|truncate:120:"...":true}</td><td style="text-align: center;"><select name="field2">{$smarty.capture.chooseoptions}</select></td></tr>{/if}
+        {if $this.oneLine.field3}<tr><td class="rowwin">{$this.oneLine.field3|basedecode|wintoutf|truncate:120:"...":true}</td><td class="rowutf8" style="display: none;">{$this.oneLine.field3|basedecode|truncate:120:"...":true}</td><td style="text-align: center;"><select name="field3">{$smarty.capture.chooseoptions}</select></td></tr>{/if}
+        {if $this.oneLine.field4}<tr><td class="rowwin">{$this.oneLine.field4|basedecode|wintoutf|truncate:120:"...":true}</td><td class="rowutf8" style="display: none;">{$this.oneLine.field4|basedecode|truncate:120:"...":true}</td><td style="text-align: center;"><select name="field4">{$smarty.capture.chooseoptions}</select></td></tr>{/if}
+        {if $this.oneLine.field5}<tr><td class="rowwin">{$this.oneLine.field5|basedecode|wintoutf|truncate:120:"...":true}</td><td class="rowutf8" style="display: none;">{$this.oneLine.field5|basedecode|truncate:120:"...":true}</td><td style="text-align: center;"><select name="field5">{$smarty.capture.chooseoptions}</select></td></tr>{/if}
+        {if $this.oneLine.field6}<tr><td class="rowwin">{$this.oneLine.field6|basedecode|wintoutf|truncate:120:"...":true}</td><td class="rowutf8" style="display: none;">{$this.oneLine.field6|basedecode|truncate:120:"...":true}</td><td style="text-align: center;"><select name="field6">{$smarty.capture.chooseoptions}</select></td></tr>{/if}
+        {if $this.oneLine.field7}<tr><td class="rowwin">{$this.oneLine.field7|basedecode|wintoutf|truncate:120:"...":true}</td><td class="rowutf8" style="display: none;">{$this.oneLine.field7|basedecode|truncate:120:"...":true}</td><td style="text-align: center;"><select name="field7">{$smarty.capture.chooseoptions}</select></td></tr>{/if}
+        {if $this.oneLine.field8}<tr><td class="rowwin">{$this.oneLine.field8|basedecode|wintoutf|truncate:120:"...":true}</td><td class="rowutf8" style="display: none;">{$this.oneLine.field8|basedecode|truncate:120:"...":true}</td><td style="text-align: center;"><select name="field8">{$smarty.capture.chooseoptions}</select></td></tr>{/if}
+        {if $this.oneLine.field9}<tr><td class="rowwin">{$this.oneLine.field9|basedecode|wintoutf|truncate:120:"...":true}</td><td class="rowutf8" style="display: none;">{$this.oneLine.field9|basedecode|truncate:120:"...":true}</td><td style="text-align: center;"><select name="field9">{$smarty.capture.chooseoptions}</select></td></tr>{/if}
+    </table><br/>
+
+    <input type="submit" value="Загрузить данные" />
+</form>
+
+{else}
+    <p><b>Не обнаружено загруженных данных. Пожалуйста <a href="{link show=orgimportzakupka headid=$this.zakObj->id}">повторите загрузку</a>.</b></p>
+{/if}

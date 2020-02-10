@@ -1,0 +1,74 @@
+{assign var=this value=$ZakupkiControl}
+
+{literal}<script type="text/javascript" src="http://www.walletone.com/merchant/widget/1.0.0/script.js"></script>{/literal}
+
+<!-- новые закупки -->
+{if !$this.cat}<h1>Закупки</h1>{else}{assign var=catid value=$this.cat}<h1>Совместные закупки {$this.categories.$catid}</h1>{/if}
+{if $this.mode == 'done'}<p>В категорию <b>Набранные</b> попадают закупки, по которым сбор заказов уже завершён.</p>{/if}
+{if $this.mode == 'voting'}<p><b>На голосовании</b> находятся закупки готовые к открытию. Чем больше участников проголосует за открытие закупки, тем быстрее закупка будет открыта.</p>{/if}
+
+{if $this.zhlist}
+<!-- ссылки на разные статусы -->
+	<ul class="coll-ul">
+		{foreach from=$this.zhlist item=zhitem name=zhlst}
+		{assign var=headid value=$zhitem->id}
+			<li>
+				<div class="coll-cell">
+					<div class="coll-img">
+						<a href="{link show=viewcollection id=$zhitem->id}" title="{$zhitem->name}">
+						{if $zhitem->picFile1}<img src="{$zhitem->picSrv1}/images/zheads/small/{$zhitem->picFile1}" alt="{$zhitem->name}" class="img-thumbnail" />{else}<img src="/images/zhempic.gif" class="img-thumbnail" alt=""/>{/if}
+						</a>
+						{if $zhitem->status != 'STATUS_VOTING'}{if $zhitem->status == 'STATUS_ACTIVE' || $zhitem->status == 'STATUS_ADDMORE'}<p class="coll-narate">{if $zhitem->narate >= 100}минималка набрана{else}{if $zhitem->narate > 0}набрано на {$zhitem->narate|roundzero}%{/if}{/if}</p>{else}<p class="coll-narate">набрано на 100%</p>{/if}
+						{else}
+							<p class="coll-narate">
+								{if $this.actorid}{if !$this.myvotes.$headid}<a href="{link do=uservote headid=$headid}" title="Голосовать">+</a>{/if}{/if}
+								{if $this.votes.$headid}{declension count=$this.votes.$headid form1=голос form2=голоса form5=голосов}{/if}
+							</p>
+						{/if}
+					</div>
+					<div class="coll-desc">
+						<p class="coll-name"><a href="{link show=viewcollection id=$zhitem->id}">{$zhitem->name|truncate:110:"...":false}</a></p>
+						<p class="coll-orgname">{assign var=orgId value=$zhitem->orgId}<a href="{link show=vieworg id=$orgId}">{$this.orgNames.$orgId}</a></p>
+						<p class="coll-anotation">{$zhitem->specialNotes|truncate:200:"...":false}</p>
+					</div>
+				</div>
+			</li>
+		{/foreach}
+	</ul>
+
+	{capture name=anypage}{frontPager total=$this.total per=$this.perPage pageParam='p'}{/capture}
+	{if $smarty.capture.anypage !== ""}
+	<div class="paging-block">
+		<dl class="front-paging">
+			<dt>Страница:</dt>
+			<dd>{$smarty.capture.anypage}</dd>
+		</dl>
+	</div>
+	{/if}
+
+{literal}
+<center>
+    <div id="w1widget"></div>
+    <script type="text/javascript">
+        W1.widget({
+            "pt": "WalletOneRUB,CreditCardRUB,SberOnlineRUB,QiwiWalletRUB,YandexMoneyRUB",
+            "bigLogo": false,
+            "grayscale": false,
+            "blackBg": false,
+            "fixWidth": "",
+            "container": "w1widget"
+        });
+    </script>
+</center>
+{/literal}
+
+{else}
+
+	{if $this.mode == 'done'}
+		<p>Список пуст.</p>
+	{else}
+		<p>На данный момент нет активных закупок.</p>
+	{/if}
+
+{/if}
+

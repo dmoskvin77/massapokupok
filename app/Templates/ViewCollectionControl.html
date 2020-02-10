@@ -1,0 +1,361 @@
+{assign var=this value=$ViewCollectionControl}
+{formrestore id="opt-zakupka-line-add"}
+
+{loadscript file='/css/ketchup/jquery.ketchup.css' type='css'}
+{loadscript file='/js/ketchup/jquery.ketchup.all.min.js' type='js'}
+
+{literal}
+<script type="text/javascript">
+    var lastAnsId = 0;
+	$().ready(function()
+	{
+        $('.detailedlist').click(function(e)
+        {
+            var gotId = $(this).attr("id");
+            var pureId = gotId.split("detailedlist-").join("");
+            window.location.href = "/index.php?show=viewcollection&id="+pureId+"#rows";
+        });
+
+        $('.compactlist').click(function(e)
+        {
+            var gotId = $(this).attr("id");
+            var pureId = gotId.split("compactlist-").join("");
+            window.location.href = "/index.php?show=viewcollection&mode=compact&id="+pureId+"#rows";
+        });
+
+        $('.shortlist').click(function(e)
+        {
+            var gotId = $(this).attr("id");
+            var pureId = gotId.split("shortlist-").join("");
+            window.location.href = "/index.php?show=viewcollection&mode=short&id="+pureId+"#rows";
+        });
+
+        // покупка из сокращенного списка
+        $('.zlshortpush').click(function(e)
+        {
+            var gotId = $(this).attr("id");
+            // id ряда
+            var pureId = gotId.split("zlshortid-").join("");
+            // что было выбрано в ряду
+            var gotVal = $('#'+gotId+'-sel').val();
+
+            if (gotVal != undefined & gotVal != '')
+                window.location.href = "/index.php?do=userplaceshortorder&zlid=" + pureId + "&val=" + escape(gotVal) + "&mode={/literal}{$this.mode}{literal}";
+            else
+                window.location.href = "/index.php?do=userplaceshortorder&zlid="+pureId+"&mode={/literal}{$this.mode}{literal}";
+
+        });
+
+        // покупка товара по кол-ву (положить в корзину)
+        $('.zlselpush').click(function(e)
+        {
+            var gotZlId = $(this).attr("id");
+            // чистый id
+            var pureZlId = gotZlId.split("zlchkolvoid-").join("");
+            gotZlId = gotZlId + "-sel";
+            var gotVal = $('#'+gotZlId).val();
+
+            window.location.href = "/index.php?do=userplaceorderval&lid="+pureZlId+"&val="+gotVal+"&mode={/literal}{$this.mode}{literal}";
+        });
+
+        $('.commint-cancel').hide();
+
+        $('.commint-click').click(function(e){
+
+            // со всех снимаем яркую линию
+            $('.basic-comment').css("border-left", "#666 solid 2px");
+            $('.commint-cancel').hide();
+
+            // ставим на конкретный камент
+            var ansId = '#' + $(this).attr("id") + 'div';
+            var realId = $(this).attr("id").split("ans").join("");
+            // ссылка "отмена"
+            var canId = '#can' + realId;
+            var rootId = $(this).attr("rootid");
+
+            // переместим див с блоком формы к комментарию
+            $('.comm-title').hide();
+            if ($('.comment-movable').html() == "")
+            {
+                $('#cont' + realId).html($('#cont' + lastAnsId).html());
+                $('#cont' + lastAnsId).html("");
+            }
+            else
+            {
+                $('#cont' + realId).html($('.comment-movable').html());
+                $('.comment-movable').html("");
+            }
+
+            $(ansId).css("border-left", "#6fbb95 solid 2px");
+            $('#hiddenSourceId').attr("value", realId);
+            $('#hiddenRootId').attr("value", rootId);
+
+            $('.rounded-div').css("background-color", "#bcffdd");
+
+            $(canId).show();
+
+            lastAnsId = realId;
+
+            return false;
+
+        });
+
+        // отмена ответа
+        $('.commint-cancel').click(function(e){
+            // со всех снимаем
+            $('.basic-comment').css("border-left", "#666 solid 2px");
+            $('.commint-cancel').hide();
+            $('#hiddenSourceId').attr("value", 0);
+            $('#hiddenRootId').attr("value", 0);
+            $('.rounded-div').css("background-color", "#e7e7e7");
+
+            // перемещаем блок обратно
+            var realId = $(this).attr("id").split("can").join("");
+            $('.comment-movable').html($('#cont' + realId).html());
+            $('#cont' + realId).html("");
+            $('.comm-title').show();
+
+        });
+
+        $(window).scroll(lazyload);
+        setTimeout('lazyload()', 1500);
+	});
+
+    // доскролл
+    function movedown(sdvigeltid) {
+        var y = $(window).scrollTop();
+        var sdvig = $('#'+sdvigeltid).height();
+        $("html, body").animate({ scrollTop: y + sdvig }, 50);
+        // $(window).scrollTop(y + sdvig);
+    }
+
+
+    // открыть слой при скролле
+    function lazyload()
+    {
+        var wt = $(window).scrollTop();
+        var mainPozOffset = $('.startingzlines').position().top;
+        if (mainPozOffset > 0) {
+            var wb = wt + mainPozOffset + $(window).height();
+            var i = 0;
+            $(".lazyscroll").each(function () {
+                i++;
+                if (i < 9999)
+                {
+                    var oid = $(this).attr("id");
+                    var ot = mainPozOffset + $(this).position().top;
+
+                    if(!$(this).attr("loaded") && wb > ot)
+                    {
+                        $(this).removeClass("lazyscroll");
+                        $('#'+oid+'_hidden').show();
+
+                        // доскролл
+                        var goToFunction = oid+'_hidden';
+                        goToFunction = 'movedown("'+goToFunction+'")';
+                        // setTimeout(goToFunction, 50);
+
+                    }
+
+                }
+
+            });
+        }
+    }
+
+</script>
+{/literal}
+
+{if $this.headid}
+{assign var=oneZakObj value=$this.headobj}
+{assign var=oneOrgId value=$oneZakObj->orgId}
+{assign var=oneOrgObj value=$this.orgList.$oneOrgId}
+
+	<div class="thumbnail basket-orderhead add-grey-bgr">
+		<div class="basket-attantion">
+		</div>
+
+		<div class="basket-zakupka">
+			<div class="basket-zakupka-show">
+				<div class="basket-zakupka-pic">
+					<img class="img-thumbnail" src="{if $oneZakObj->picFile1}{$oneZakObj->picSrv1}/images/zheads/small/{$oneZakObj->picFile1}?ver={$oneZakObj->picVer1}{else}/images/zhempic.gif{/if}" />
+				</div>
+				<div class="basket-zakupka-details">
+					<div class="basket-zakupka-name"><a href="{link show=viewcollection id=$oneZakObj->id}">{$oneZakObj->name}</a></div>
+					<div class="basket-zakupka-status">{$this.headstatusname}</div>
+					<div class="basket-zakupka-org"><a href="{link show=vieworg id=$oneOrgObj->id}">{$oneOrgObj->nickName}</a>{if $this.ts-$oneOrgObj->dateLastVisit < 300}<img src="/images/online.png" width="5" height="5" class="onlineimg" />{/if}</div>
+					<div class="basket-zakupka-annotation">
+						{$oneZakObj->specialNotes}
+					</div>
+				</div>
+			</div>
+
+			<div class="thumbnail basket-zakupka-params">
+				<dl>
+					{if $oneZakObj->orderCount > 0 && ($this.headstatus == 'STATUS_ACTIVE' OR $this.headstatus == 'STATUS_ADDMORE')}
+						<dt>Заказов:</dt>
+						<dd>{$oneZakObj->orderCount}</dd>
+					{/if}
+					{if $oneZakObj->minValue > 0}
+					{assign var=ostValue value=$oneZakObj->minValue-$oneZakObj->orderCount}
+						{if $ostValue > 0 && $ostValue < 100}
+							<dt>Мин. кол-во:</dt>
+							<dd>{$ostValue}</dd>
+						{/if}
+					{/if}
+					{if $oneZakObj->minAmount > 0}
+						<dt>Минималка:</dt>
+						<dd>{$oneZakObj->minAmount|numberformat} р.</dd>
+					{/if}
+					<dt>Оргсбор:</dt>
+					<dd>{$oneZakObj->orgRate} %</dd>
+				</dl>
+			</div>
+		</div>
+
+		<div class='zladdbtn'>
+		{if $oneZakObj->useForm == 'on'}
+			{if $this.headstatus == 'STATUS_ACTIVE' OR $this.headstatus == 'STATUS_ADDMORE'}<button class="btn btn-success" onclick="window.location.href='{link show=useraddorder headid=$this.headid}'">Добавить заказ</button>{/if}
+		{/if}
+		</div>
+
+		<!-- описание закупки -->
+		<p>{$this.headobj->description|bbcode}</p>
+
+	</div>
+
+{literal}
+<script type="text/javascript">(function(w,doc) {
+    if (!w.__utlWdgt ) {
+        w.__utlWdgt = true;
+        var d = doc, s = d.createElement('script'), g = 'getElementsByTagName';
+        s.type = 'text/javascript'; s.charset='UTF-8'; s.async = true;
+        s.src = ('https:' == w.location.protocol ? 'https' : 'http')  + '://w.uptolike.com/widgets/v1/uptolike.js';
+        var h=d[g]('body')[0];
+        h.appendChild(s);
+    }})(window,document);
+</script>
+<div data-background-alpha="0.0" data-buttons-color="#FFFFFF" data-counter-background-color="#ffffff" data-share-counter-size="12" data-top-button="true" data-share-counter-type="disable" data-share-style="1" data-mode="share" data-like-text-enable="false" data-mobile-view="true" data-icon-color="#ffffff" data-orientation="horizontal" data-text-color="#000000" data-share-shape="round-rectangle" data-sn-ids="fb.vk.ok." data-share-size="30" data-background-color="#ffffff" data-preview-mobile="false" data-mobile-sn-ids="fb.vk.ok.ev.gp." data-pid="1360231" data-counter-background-alpha="1.0" data-following-enable="false" data-exclude-show-more="true" data-selection-enable="false" class="uptolike-buttons" ></div>
+{/literal}
+
+    <div class='zladdbtn'>
+        <button onclick="window.location.href='#directmsg'">Перейти к комментариям</button>
+    </div>
+
+	<!-- ставим сюда отображение рядов -->
+	{if $this.lineList}
+    <a name="rows"></a>
+    <div class="startingzlines">
+	<h4>Ряды: <button id="detailedlist-{$this.headid}" class="btn btn-default btn-sm detailedlist{if !$this.mode} grey-bgr{/if}" type="button" title="Подробно"><span class="glyphicon glyphicon-th-list"></span></button> <button id="compactlist-{$this.headid}" class="btn btn-default btn-sm compactlist{if $this.mode == 'compact'} grey-bgr{/if}" type="button" title="Компактно"><span class="glyphicon glyphicon-th-large"></span></button> <button id="shortlist-{$this.headid}" class="btn btn-default btn-sm shortlist{if $this.mode == 'short'} grey-bgr{/if}" type="button" title="Кратко"><span class="glyphicon glyphicon-th"></span></button></h4>
+        {if !$this.mode}
+            {foreach from=$this.lineList item=oneLine}
+                {assign var=prodid value=$oneLine->productId}
+                {assign var=prodobj value=$this.prodList.$prodid}
+                <a name="r{$oneLine->id}"></a>
+                <p class="lllazyscroll" id="scrl_{$oneLine->id}" style="font-weight: bold; font-size: 15px;">{$prodobj->name}</p>
+                {if $prodobj->artNumber}<p style="font-size: 12px;"><b>Артикул:</b> {$prodobj->artNumber}</p>{/if}
+                <!-- здесь ещё надо поставить фото, пока что они будут в описаниях -->
+                <div class="lllazyscrollhidden" style="display: block; position: relative;" id="scrl_{$oneLine->id}_hidden">
+                    {if $prodobj->description}<p id="scrl_{$oneLine->id}_desc" class="showdesc">{$prodobj->description|bbcode}</p>{/if}
+                    <p><span style="font-weight: bold; font-size: 16px;">цена: {if $oneLine->oldWholePrice > 0}<del><span style="color: red; font-weight: normal; font-size: 13px;">{$oneLine->oldWholePrice|numberformat}</span></del> &nbsp;{/if}{$oneLine->wholePrice|numberformat}</span> {$this.headobj->currency}</p>
+                    <!-- а сюда ставим ряды -->
+                    <div class="zlinedata">{$oneLine->buildRow}</div>
+                </div>
+                <hr/>
+            {/foreach}
+        {/if}
+
+        {if $this.mode == 'compact'}
+            <ul class="compactrow">
+            {foreach from=$this.lineList item=oneLine}
+                <li>
+                {assign var=prodid value=$oneLine->productId}
+                {assign var=prodobj value=$this.prodList.$prodid}
+                <a name="r{$oneLine->id}"></a>
+                    <div class="outercompactrow lazyscroll" id="scrl_{$oneLine->id}">
+                        <div class="zlinecompactdata">{$oneLine->buildRow}</div>
+                        {if $prodobj->oneRowPic}
+                            <div style="display: none;" id="scrl_{$oneLine->id}_hidden" class="imgcompactrow">
+                                <img src="{$prodobj->oneRowPic}" style="max-height: 100px; max-width: 200px;" />
+                            </div>
+                        {/if}
+                        <p style="font-weight: bold; font-size: 12px; margin-top: 3px;">{$prodobj->name|truncate:130:"..":false} <span style="color: #ff0000;">{$oneLine->wholePrice|numberformat}</span> {$this.headobj->currency}</p>
+                        {if $prodobj->shortDesc}<p style="font-size: 11px; margin-top:-10px;">{if $prodobj->oneRowPic}{$prodobj->shortDesc|truncate:200:"...":false}{else}{$prodobj->shortDesc|truncate:500:"...":false}{/if}</p>{/if}
+                    </div>
+                </li>
+            {/foreach}
+            </ul>
+        {/if}
+
+        {if $this.mode == 'short'}
+        <ul class="shortrow">
+            {foreach from=$this.lineList item=oneLine}
+            <li>
+                {assign var=prodid value=$oneLine->productId}
+                {assign var=prodobj value=$this.prodList.$prodid}
+                <a name="r{$oneLine->id}"></a>
+                <div class="outershortrow lazyscroll" id="scrl_{$oneLine->id}">
+                    <div class="zlineshortdata">{$oneLine->buildRow}</div>
+                    {if $prodobj->oneRowPic}
+                    <div style="display: none;" id="scrl_{$oneLine->id}_hidden" class="imgshortrow">
+                        <img src="{$prodobj->oneRowPic}" style="max-height: 75px; max-width: 120px;" />
+                    </div>
+                    {/if}
+                    <p style="font-weight: bold; font-size: 12px; margin-top: 2px;">{$prodobj->name|truncate:95:"..":false} <span style="color: #ff0000;">{$oneLine->wholePrice|numberformat}</span> {$this.headobj->currency}</p>
+                    {if $prodobj->artNumber}<p style="font-size: 10px; margin-top:-8px;"><b>Артикул:</b> {$prodobj->artNumber}</p>{/if}
+                </div>
+            </li>
+            {/foreach}
+        </ul>
+        {/if}
+    </div>
+	{/if}
+	<!-- отображение рядов -->
+
+    <a name="directmsg"></a>
+    <div class="comment-movable">
+        <h4>Ваш комментарий:</h4>
+        <div class="rounded-div">
+            <form id="placecomment" name="placecomment" method="post" action="{link do=placecocomment headid=$this.headid commtype=collection}">
+                <input type="hidden" id="hiddenSourceId" name="sourceId" value="" />
+                <input type="hidden" id="hiddenRootId" name="rootId" value="" />
+                <textarea id="headcomment" class="comment-input" name="body"></textarea><br />
+                <input class="comment-button" type="submit" value="Добавить" />
+            </form>
+        </div>
+    </div>
+    <p><!-- --></p>
+    {if $this.commlist}
+    <h4 class="comment-title">Комментарии участников:</h4>
+    {foreach from=$this.commlist item=comitem}
+    {if !$comitem.level}{assign var=rootId value=$comitem.id}{/if}
+    <div id="ans{$comitem.id}div" class="basic-comment comment-level-{$comitem.level}">
+        <div class="commint-date">{$comitem.dateCreate|dateformat:"d M Y"}</div>
+        <div class="commint-nick">{if $comitem.isAnon == 1}Аноним{else}{$comitem.showName}{/if}</div>
+        <div class="commint-body">{$comitem.body}</div>
+        <div class="commint-answer"><a class="commint-click" id="ans{$comitem.id}" rootId="{$rootId}" href="#directmsg">ответить</a> <a class="commint-cancel" id="can{$comitem.id}" href="#directmsg">(отмена)</a></div>
+        <div id="cont{$comitem.id}" class="comment-moved"></div>
+    </div>
+
+    {if $this.subcomments[$rootId]}
+    {assign var=submessages value=$this.subcomments[$rootId]}
+    {foreach from=$submessages item=subitem}
+    <div id="ans{$subitem.id}div" class="basic-comment comment-level-{$subitem.level}">
+        <div class="commint-date">{$subitem.dateCreate|dateformat:"d M Y"}</div>
+        <div class="commint-nick">{if $subitem.isAnon == 1}Аноним{else}{$subitem.showName}{/if}</div>
+        <div class="commint-body">{$subitem.body}</div>
+        <div class="commint-answer"><a class="commint-click" id="ans{$subitem.id}" rootId="{$rootId}" href="#directmsg">ответить</a> <a class="commint-cancel" id="can{$subitem.id}" href="#directmsg">(отмена)</a></div>
+        <div id="cont{$subitem.id}" class="comment-moved"></div>
+    </div>
+    {/foreach}
+    {/if}
+    {/foreach}
+    {else}
+    <h3 class="comment-title">Ваш комментарий будет первым!</h3>
+    {/if}
+
+{else}
+
+	<p>Ошибка доступа</p>
+
+{/if}

@@ -1,0 +1,47 @@
+{assign var=this value=$OrgEditOptControl}
+
+{formrestore id="opt-edit"}
+
+{loadscript file='/css/ketchup/jquery.ketchup.css' type='css'}
+{loadscript file='/js/ketchup/jquery.ketchup.all.min.js' type='js'}
+
+{literal}
+<script type="text/javascript">
+	$().ready(function()
+	{
+		$('#opt-edit').ketchup();
+
+	});
+
+</script>
+{/literal}
+
+<form action="{link do=orgeditopt}" id="opt-edit" method="post">
+	<input type="hidden" name="id" value="{$this.optovik->id}" />
+
+	<div class="opt-edit-table">
+		<h2>Оптовик</h2>
+		<dl>
+			<dt>Наименование:<span class="necessary-star">*</span></dt>
+			<dd><input type="text" id="name" name="name" value="{$this.optovik->name}" maxlength="255" data-validate="validate(required, maxlength(255))" /></dd>
+		</dl>
+		<dl>
+			<dt>Адреса сайтов:</dt>
+			{if $this.urls}
+				{foreach from=$this.urls item=oneurl}
+				<dd><input type="text" id="url_{$oneurl->id}" name="url_{$oneurl->id}" value="{$oneurl->url}" maxlength="255" data-validate="validate(maxlength(255))" /> <a href="{link do=orgremoveopturl id=$oneurl->id}">Удалить</a></dd>
+				{/foreach}
+			{/if}
+
+			<dd><input type="text" id="urlnew_1" name="urlnew_1" value="" maxlength="255" data-validate="validate(maxlength(255))" /></dd>
+			<dd><input type="text" id="urlnew_2" name="urlnew_2" value="" maxlength="255" data-validate="validate(maxlength(255))" /></dd>
+			<dd><input type="text" id="urlnew_3" name="urlnew_3" value="" maxlength="255" data-validate="validate(maxlength(255))" /></dd>
+		</dl>
+		<dl id="submit-dl">
+			<dt></dt>
+			<dd><input type="submit" id="submitForm" value="Сохранить"/></dd>
+		</dl>
+
+	</div>
+
+</form>

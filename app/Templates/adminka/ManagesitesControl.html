@@ -1,0 +1,61 @@
+{assign var=this value=$ManagesitesControl}
+
+<h2>Управление сайтами</h2>
+
+<div class="create">
+	<input type="button" onclick="window.location='{alink show=addsite}'" value="Добавить сайт" />
+</div>
+
+{if $this.sites}
+<h3>Сайты-сателиты</h3><br/>
+<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+	<tr>
+		<th>ID</th>
+		<th>Домен</th>
+		<th>Поддомен</th>
+		<th>Дата создания</th>
+        <th>Статус</th>
+		<th>Действие</th>
+	</tr>
+	{foreach item=site from=$this.sites}
+		<tr class="{cycle values='color,'}">
+            <td>{$site->id}</td>
+			<td>{$site->hostName}</td>
+			<td>{$site->tplFolder}</td>
+            <td>{$site->dateCreate|dateformat}</td>
+            <td>{if $site->status == 'STATUS_ENABLED'}включен{else}выключен{/if}</td>
+			<td>
+				<a href="{alink show=siteinfo siteid=$site->id}">Инфо</a>{if $site->id > 1} |
+                {if $org->status == 'STATUS_ENABLED'}<a href="{alink show=sitestatusdisabled siteid=$site->id}">Выключить</a>{else}<a href="{alink show=sitestatusenabled siteid=$site->id}">Включить</a>{/if}{/if}
+			</td>
+		</tr>
+	{/foreach}
+</table>
+{/if}
+
+{if $this.orgs}
+<h3>Сайты организаторов</h3><br/>
+<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+    <tr>
+        <th>ID</th>
+        <th>Поддомен</th>
+        <th>На сайте</th>
+        <th>Дата создания</th>
+        <th>Статус</th>
+        <th>Действие</th>
+    </tr>
+    {foreach item=org from=$this.orgs}
+    <tr class="{cycle values='color,'}">
+        <td>{$org->id}</td>
+        <td>{$org->tplFolder}</td>
+        <td></td>
+        <td>{$org->dateCreate|dateformat}</td>
+        <td>{if $org->status == 'STATUS_ENABLED'}включен{else}выключен{/if}</td>
+        <td>
+            <a href="{alink show=orginfo siteid=$site->id}">Инфо</a> |
+            {if $org->status == 'STATUS_ENABLED'}<a href="{alink show=orgstatusdisabled orgid=$org->id}">Выключить</a>{else}<a href="{alink show=orgstatusenabled orgid=$org->id}">Включить</a>{/if}
+        </td>
+    </tr>
+    {/foreach}
+</table>
+{/if}

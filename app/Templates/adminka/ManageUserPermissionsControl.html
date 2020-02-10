@@ -1,0 +1,26 @@
+{assign var=this value=$ManageUserPermissionsControl}
+
+<h2>Управление правами пользователей</h2>
+
+{if $this.list}
+<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+
+	<tr>
+		<th>Пользователь</th>
+		<th>Права</th>
+		<th>Действия</th>
+	</tr>
+
+	{foreach from=$this.userPermissions item=permissions key=key name=userpermlist}
+	{assign var=user value=$this.users.$key}
+	<tr class="{cycle values='color,'}">
+		<td>{$user->nickName}</td>
+		<td>{foreach from=$permissions item=onepermission name=permcycle}{$onepermission}, {/foreach}</td>
+		<td class="edit">
+			<a href="{alink show=edituserpermissions id=$item->id}">Редактировать</a> | <a href="{alink do=deleteuserpermissions id=$item->id}">Удалить</a>
+		</td>
+	</tr>
+	{/foreach}
+
+</table>
+{/if}

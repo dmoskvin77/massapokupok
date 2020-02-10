@@ -1,0 +1,72 @@
+{assign var=this value=$UserControl}
+
+<h2>Данные пользователя</h2>
+
+	<table class="table table-hover">
+		<tr>
+			<td>ID:</td>
+			<td>{$this.user->id}</td>
+		</tr>
+		<tr>
+			<td>e-mail:</td>
+			<td>{$this.user->login}</td>
+		</tr>
+        <tr>
+            <td>Ник:</td>
+            <td>{$this.user->nickName}{if $this.user->requestOrg} (кандидат){/if}{if $this.user->isOrg} (орг.){/if}</td>
+        </tr>
+		<tr>
+			<td>ФИО :</td>
+			<td>{$this.user->lastName} {$this.user->firstName} {$this.user->secondName}</td>
+		</tr>
+		<tr>
+			<td>Дата регистрации:</td>
+			<td>{$this.user->dateCreate|dateformat:"d M Y"}</td>
+		</tr>
+		<tr>
+			<td>Телефон:</td>
+			<td>{$this.user->phone1}</td>
+		</tr>
+		{if $this.user->phone2}
+		<tr>
+			<td>Телефон 2:</td>
+			<td>{$this.user->phone2}</td>
+		</tr>
+		{/if}
+		{if $this.user->dateLastVisit}
+		<tr>
+			<td>Заходил на сайт:</td>
+			<td>{$this.user->dateLastVisit|dateformat:"d M Y в H:s"}</td>
+		</tr>
+		{/if}
+        {if $this.user->isOrg}
+        <tr>
+            <td>% комиссии сайту:</td>
+            <td>{if $this.user->orgPersent > 0}{$this.user->orgPersent}{else}по-умолчанию{/if} (точность до 1/10000)</td>
+        </tr>
+        {/if}
+	</table>
+
+{if $this.user->isOrg}
+<div class="man-con-create">
+    <input type="button" onclick="window.location='{alink show=edituser userid=$this.user->id}'" value="Редактировать" />
+</div><br/>
+{/if}
+
+{if $this.permissions}
+	<h4>Имеющиеся права пользователя:</h4>
+	<ul>
+		{foreach from=$this.permissions item=permission}
+			{assign var=permtype value=$permission->type}
+			<li>{$this.permissionstypes.$permtype}</li>
+		{/foreach}
+	</ul>
+	<div class="man-con-create">
+		<input type="button" onclick="window.location='{alink show=edituserpermissions userid=$this.user->id}'" value="Редактировать права пользователю" />
+	</div>
+{else}
+	<div class="man-con-create">
+		<input type="button" onclick="window.location='{alink show=edituserpermissions userid=$this.user->id}'" value="Добавить права пользователю" />
+	</div>
+{/if}
+<p><!-- --></p>

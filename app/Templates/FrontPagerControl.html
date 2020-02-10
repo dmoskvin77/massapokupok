@@ -1,0 +1,13 @@
+{if $pages}
+	<ul class="b-paging-ul">
+		<li class="prev">
+			{if $prevPage!==null}<a href="{$url|replace:'=':'/'|replace:'?':'/'|replace:'&':'/'|replace:'amp;':''}/{$prevPage}" rel="prev">&larr;</a>{else}&larr;{/if}
+		</li>
+		{foreach key=key item=page from=$pages}
+			{if $key==$currentPage}<li class="current">{$page}</li>{else}<li><a href="{$url|replace:'=':'/'|replace:'?':'/'|replace:'&':'/'|replace:'amp;':''}/{$key}">{$page}</a></li>{/if}
+		{/foreach}
+		<li class="next">
+			{if $nextPage}<a href="{$url|replace:'=':'/'|replace:'?':'/'|replace:'&':'/'|replace:'amp;':''}/{$nextPage}" rel="next">&rarr;</a>{else}&rarr;{/if}
+		</li>
+	</ul>
+{/if}

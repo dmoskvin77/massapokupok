@@ -1,0 +1,23 @@
+{assign var=this value=$TabmenuControl}
+
+{if $this.actor}
+    <div class="topmenu-align" style="width: 100%;">
+        <div style="float: left; margin-top: 3px; margin-bottom: 3px; overflow: hidden;">{if $this.actor}<span class="glyphicon glyphicon-user" aria-hidden="true"></span>&nbsp;<a href="{link show=usereditprofile id=$this.actor->id}">{$this.actor->nickName}</a>&nbsp;&nbsp;<a href="/index.php?do=logout"><span class="glyphicon glyphicon-log-out" aria-hidden="true" data-toggle="tooltip" data-placement="right" title="Выход"></span></a>{/if}</div>
+        <div style="float: right;">
+            {if $this.usermenu}
+            <div style="float: left; margin-left: 10px; margin-top: 5px;" class="btn-group btn-group-sm">
+                {foreach from=$this.usermenu item=tmitem name=trufor}
+                    <button type="button" title="{$tmitem.title}" onclick="window.location.href='{$tmitem.link}'" class="btn btn-default topmenu-lnk btn-green {if $this.curPage == $tmitem.cname}active{/if}"><span>{$tmitem.name}</span></button>
+                {/foreach}
+            </div>
+            {/if}
+            {if $this.orgmenu}
+            <div style="float: left; margin-left: 10px; margin-top: 5px;" class="btn-group btn-group-sm">
+                {foreach from=$this.orgmenu item=tmitem name=trufor}
+                    <button type="button" title="{$tmitem.title}" onclick="window.location.href='{$tmitem.link}'" class="btn btn-default topmenu-lnk btn-green {if $this.curPage == $tmitem.cname}active{/if}"><span>{$tmitem.name}</span></button>
+                {/foreach}
+            </div>
+            {/if}
+        </div>
+    </div>
+{/if}

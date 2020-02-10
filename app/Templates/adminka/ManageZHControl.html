@@ -1,0 +1,33 @@
+{assign var=this value=$ManageZHControl}
+
+<h2>Модерация закупок</h2>
+
+{if $this.zhlist}
+
+	<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+		<tr>
+			<th>ID</th>
+			<th>Название</th>
+			<th>Дата создания</th>
+			<th>Действия</th>
+		</tr>
+		{foreach item=zh from=$this.zhlist}
+			{assign var=status value=$user->entityStatus}
+			<tr class="{cycle values='color,'}">
+				<td>{$zh->id}</td>
+				<td>{$zh->name}</td>
+				<td>{$zh->dateCreate|dateformat:"d M Y"}</td>
+				<td>
+					<a onclick="window.open('{alink show=zh headid=$zh->id}', '_blank', 'menubar=no,toolbar=no,location=no,directories=no,personalbar=no,status=no,scrollbars=yes,width=600,height=600'); return false;" href="{alink show=zh headid=$zh->id}">Информация</a> | <a href="{alink do=aprovezh headid=$zh->id}">Одобрить</a> | Удалить (отказ) - TODO: уведомить покупателей что из заказа убраны товары и орга, что закупку удалили
+				</td>
+			</tr>
+		{/foreach}
+	</table>
+
+<p>{pager total=$this.total per=$this.perPage}</p>
+
+{else}
+
+	<h3>Нет закупок, ожидающих модерацию</h3>
+
+{/if}

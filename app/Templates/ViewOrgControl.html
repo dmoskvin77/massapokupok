@@ -1,0 +1,112 @@
+{assign var=this value=$ViewOrgControl}
+
+{loadscript file='/wysibb/theme/default/wbbtheme.css' type='css'}
+
+{loadscript file='/wysibb/jquery.wysibb.min.js' type='js'}
+{loadscript file='/wysibb/lang/ru.js' type='js'}
+
+{literal}
+<script type="text/javascript">
+	$().ready(function()
+	{
+		var wbbOpt = {
+				buttons: 'bold,italic,underline,fontsize,fontcolor,smilebox,|,bullist,numlist,|,img,video,link',
+				allButtons: {
+					quote: {
+						transform: {
+							'<div class="quote">{SELTEXT}</div>':'[quote]{SELTEXT}[/quote]',
+							'<div class="quote"><cite>{AUTHOR} wrote:</cite>{SELTEXT}</div>':'[quote={AUTHOR}]{SELTEXT}[/quote]'
+						}
+					}
+				},
+				smilefind: "#smiley-box",
+				smileList: [
+					{title:CURLANG.sm1, img: '<img src="/images/smiles/sm1.png" class="sm">', bbcode:":)"},
+					{title:CURLANG.sm1, img: '<img src="/images/smiles/sm2.png" class="sm">', bbcode:":D"},
+					{title:CURLANG.sm3, img: '<img src="/images/smiles/sm3.png" class="sm">', bbcode:";)"},
+					{title:CURLANG.sm4, img: '<img src="/images/smiles/sm4.png" class="sm">', bbcode:":up:"},
+					{title:CURLANG.sm5, img: '<img src="/images/smiles/sm5.png" class="sm">', bbcode:":down:"},
+					{title:CURLANG.sm6, img: '<img src="/images/smiles/sm6.png" class="sm">', bbcode:":shock:"},
+					{title:CURLANG.sm7 ,img: '<img src="/images/smiles/sm7.png" class="sm">', bbcode:":angry:"},
+					{title:CURLANG.sm8, img: '<img src="/images/smiles/sm8.png" class="sm">', bbcode:":("},
+					{title:CURLANG.sm9, img: '<img src="/images/smiles/sm9.png" class="sm">', bbcode:":sick:"}
+				]
+		};
+
+		$("#message").wysibb(wbbOpt);
+
+	});
+
+</script>
+{/literal}
+
+<!-- подробная инфа об организаторе -->
+
+{if $this.curorg}
+	<h3>Организатор:</h3>
+	<p><b>{$this.curorg->nickName}</b>{if $this.ts-$this.curorg->dateLastVisit < 300}<img src="/images/online.png" width="5" height="5" class="onlineimg" />{/if}</p>
+	{if $this.curorg->firstName}<p>Имя: <b>{$this.curorg->firstName}</b></p>{/if}
+
+	<form id="sendpvtmessage" name="sendpvtmessage" method="post" action="{link do=sendpvtmessage}">
+		<input type="hidden" name="userId" value="{$this.curorg->id}" />
+		<textarea id="message" name="message"></textarea><br />
+		<input class="comment-button" type="submit" value="Отправить сообщение" />
+	</form>
+
+	<br/>
+
+	{if $this.zhlist}
+	<h4>Открытые закупки организатора:</h4>
+	<!-- список -->
+	<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+		<tr>
+			<th>ID</th>
+			<th>Название</th>
+			<th>Открыта</th>
+		</tr>
+		{foreach item=zh from=$this.zhlist}
+		<tr>
+			<td>{$zh->id}</td>
+			<td><a href="{link show=viewcollection id=$zh->id}">{$zh->name}</a></td>
+			<td>{if $zh->startDate}{$zh->startDate|dateformat:"d M Y"}{else}{$zh->dateCreate|dateformat:"d M Y"}{/if}</td>
+		</tr>
+		{/foreach}
+	</table>
+	{/if}
+
+    {if $this.vikupList}
+    <br/><br/>
+    <h3>Регулярные закупки организатора:</h3>
+    <table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+    <tr>
+        <th style="text-align: center;">ID</th>
+        <th style="text-align: center;" width="65%">Название</th>
+        <th style="text-align: center;">Проведено закупок</th>
+        <th style="text-align: center;">Будущие даты</th>
+        <th style="text-align: center;">Действия</th>
+    </tr>
+    {foreach from=$this.vikupList item=vikup}
+    <tr class="{cycle values='color,'}">
+        <td>{$vikup->id}</td>
+        <td>{$vikup->name}</td>
+        <td style="text-align: center;">{$vikup->countZheads}</td>
+        <td style="text-align: center;">{if $vikup->calendarData && $vikup->calendarData != ''}{$vikup->calendarData}{else}-{/if}</td>
+        <td style="text-align: center;">
+            <!-- подписан ли уже участник на указанный выкуп? -->
+            {assign var=vikupId value=$vikup->id}
+            {assign var=usersubscription value=$this.userSubscriptions.$vikupId}
+            {if $usersubscription}
+                <a href="{link do=userunsubsribezakupka id=$vikup->id}">Отписка</a>
+            {else}
+                <a href="{link do=usersubsribezakupka id=$vikup->id}">Подписаться</a>
+            {/if}
+        </td>
+    </tr>
+    {/foreach}
+    {/if}
+
+{else}
+
+	<h3>Организатор не найден</h3>
+
+{/if}

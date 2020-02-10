@@ -1,0 +1,61 @@
+{assign var=this value=$ManageOrgsControl}
+{formrestore id="orgs-filter"}
+
+<h2>Работа с организаторами</h2>
+
+<form id="orgs-filter" method="get" action="">
+
+	<input type="hidden" name="show" value="manageorgs"/>
+	<input type="hidden" name="isalive" value="1"/>
+
+	<div class="filter-orgs">
+		<h4>Фильтр для поиска</h4>
+		<dl>
+			<dt>ID:</dt>
+			<dd><input type="text" name="id" id="id" /></dd>
+		</dl>
+		<dl>
+			<dt>Логин (e-mail):</dt>
+			<dd><input type="text" name="login" id="login" /></dd>
+		</dl>
+		<dl>
+			<dt>Фамилия:</dt>
+			<dd><input type="text" name="lastname" id="lastname" /></dd>
+		</dl>
+		<dl>
+			<dd><input type="submit" id="submit" value="Показать список отбора"/></dd>
+		</dl>
+	</div>
+</form>
+
+
+{if $this.orgList}
+
+	<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+		<tr>
+			<th>ID</th>
+			<th>Логин</th>
+			<th>ФИО</th>
+			<th>Действия</th>
+		</tr>
+		{foreach item=org from=$this.orgList}
+			{assign var=status value=$org->entityStatus}
+			<tr class="{cycle values='color,'}">
+				<td>{$org->id}</td>
+				<td>{if $org->login}{$org->login}{else}{if $org->vkId}<a href="http://vkontakte.ru/id{$org->vkId}" target="_blank">{$org->vkFirstName} {$org->vkLastName}</a>{else}<b>не идентифицирован</b>{/if}{/if}</td>
+				<td>{$org->lastName} {$org->firstName} {$org->secondName}</td>
+				<td>
+					<a href="{alink show=org id=$org->id}">Информация</a>
+					{if $org->entityStatus == 0} | <a href="{alink do=activateorg id=$org->id}">Активировать</a>{/if}
+					{if $org->entityStatus == 1} | <a href="{alink do=blockorg id=$org->id}">Блокировать</a>{/if}
+					{if $org->entityStatus == 2} | Удален{/if}
+					{if $org->entityStatus == 3} | <a href="{alink do=restoreorg id=$org->id}">Разблокировать</a>{/if}
+					{if $org->entityStatus != 0 AND $org->entityStatus != 2 AND $org->entityStatus != 3 AND $org->isOrg == null AND $org->requestOrg == 1} | <a href="{alink do=aproveorg id=$org->id}">Одобрить</a>{/if}
+				</td>
+			</tr>
+		{/foreach}
+	</table>
+
+<p>{pager total=$this.total per=$this.perPage}</p>
+
+{/if}

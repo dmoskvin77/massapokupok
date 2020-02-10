@@ -1,0 +1,192 @@
+{assign var=this value=$OrgAddZakupkaHeadControl}
+{formrestore id="opt-zakupka-head-add"}
+
+{loadscript file='/wysibb/theme/default/wbbtheme.css' type='css'}
+{loadscript file='/css/ketchup/jquery.ketchup.css' type='css'}
+
+{loadscript file='/wysibb/jquery.wysibb.min.js' type='js'}
+{loadscript file='/wysibb/lang/ru.js' type='js'}
+
+{loadscript file='/js/ketchup/jquery.ketchup.all.min.js' type='js'}
+
+{literal}
+<script type="text/javascript">
+	$().ready(function()
+	{
+		$('#opt-zakupka-head-add').ketchup();
+
+		var wbbOpt = {
+				buttons: 'bold,italic,underline,fontsize,fontcolor,smilebox,|,bullist,numlist,|,img,video,link',
+				allButtons: {
+					quote: {
+						transform: {
+							'<div class="quote">{SELTEXT}</div>':'[quote]{SELTEXT}[/quote]',
+							'<div class="quote"><cite>{AUTHOR} wrote:</cite>{SELTEXT}</div>':'[quote={AUTHOR}]{SELTEXT}[/quote]'
+						}
+					}
+				},
+				smilefind: "#smiley-box",
+				smileList: [
+					{title:CURLANG.sm1, img: '<img src="/images/smiles/sm1.png" class="sm">', bbcode:":)"},
+					{title:CURLANG.sm1, img: '<img src="/images/smiles/sm2.png" class="sm">', bbcode:":D"},
+					{title:CURLANG.sm3, img: '<img src="/images/smiles/sm3.png" class="sm">', bbcode:";)"},
+					{title:CURLANG.sm4, img: '<img src="/images/smiles/sm4.png" class="sm">', bbcode:":up:"},
+					{title:CURLANG.sm5, img: '<img src="/images/smiles/sm5.png" class="sm">', bbcode:":down:"},
+					{title:CURLANG.sm6, img: '<img src="/images/smiles/sm6.png" class="sm">', bbcode:":shock:"},
+					{title:CURLANG.sm7 ,img: '<img src="/images/smiles/sm7.png" class="sm">', bbcode:":angry:"},
+					{title:CURLANG.sm8, img: '<img src="/images/smiles/sm8.png" class="sm">', bbcode:":("},
+					{title:CURLANG.sm9, img: '<img src="/images/smiles/sm9.png" class="sm">', bbcode:":sick:"}
+				]
+		};
+
+		$("#description").wysibb(wbbOpt);
+
+	});
+
+</script>
+{/literal}
+
+{if $this.optList}
+
+<p><b class="red">Внимание!</b> Аннотация - это то, что будет показано на главной странице в предспросмотре закупки.</p>
+<p>Внимательно изучите редактор описания закупки. Он позволяет добавлять смайлики, <b>картинки</b> и т.д.</p>
+
+<form action="{link do=orgaddzakupkahead}" id="opt-zakupka-head-add" method="post" enctype="multipart/form-data">
+	<input type="hidden" name="id" value="{$this.zakObj->id}" />
+	<div class="opt-zakupka-head-add-table">
+		{if !$this.zakObj}<h4>Добавление новой закупки</h4>{else}<h2>Редактирование закупки</h2>{/if}
+		<dl>
+			<dt>Название закупки:<span class="necessary-star">*</span></dt>
+			<dd><input type="text" id="name" name="name" maxlength="255" value="{$this.zakObj->name}" data-validate="validate(required, maxlength(255))" /></dd>
+		</dl>
+		{if $this.allowedStatuses}
+		<dl>
+			<dt>Статус закупки:<span class="necessary-star">*</span></dt>
+			<dd>
+				<select name="status">
+				{foreach from=$this.allowedStatuses item=onestatus key=onestatkey}
+					<option value="{$onestatkey}" {if $this.zakObj->status}{if $this.zakObj->status == $onestatkey}selected="selected"{/if}{/if}>{$onestatus}</option>
+				{/foreach}
+				</select>
+			</dd>
+		</dl>
+		{/if}
+		<dl>
+			<dt>Категория 1:<span class="necessary-star">*</span></dt>
+			<dd>
+				<select name="catId1">
+				{if $this.catList}
+				{foreach from=$this.catList item=onecat key=ockey}
+				<option value="{$ockey}" {if $this.zakObj->categoryId1}{if $this.zakObj->categoryId1 == $ockey}selected="selected"{/if}{/if}>{$onecat}</option>
+				{/foreach}
+				{/if}
+				</select>
+			</dd>
+		</dl>
+		<dl>
+			<dt>Категория 2:<span class="necessary-star">*</span></dt>
+			<dd>
+				<select name="catId2">
+				<option value="0">---</option>
+				{if $this.catList}
+				{foreach from=$this.catList item=onecat key=ockey}
+				<option value="{$ockey}" {if $this.zakObj->categoryId2}{if $this.zakObj->categoryId2 == $ockey}selected="selected"{/if}{/if}>{$onecat}</option>
+				{/foreach}
+				{/if}
+				</select>
+			</dd>
+		</dl>
+		<dl>
+			<dt>Категория 3:<span class="necessary-star">*</span></dt>
+			<dd>
+				<select name="catId3">
+				<option value="0">---</option>
+				{if $this.catList}
+				{foreach from=$this.catList item=onecat key=ockey}
+				<option value="{$ockey}" {if $this.zakObj->categoryId3}{if $this.zakObj->categoryId3 == $ockey}selected="selected"{/if}{/if}>{$onecat}</option>
+				{/foreach}
+				{/if}
+				</select>
+			</dd>
+		</dl>
+		<dl>
+			<dt>Оптовик (поставщик):<span class="necessary-star">*</span></dt>
+			<dd>
+				<select name="optId">
+				{foreach from=$this.optList item=oneopt}
+					<option value="{$oneopt->id}" {if $this.zakObj->optId}{if $this.zakObj->optId == $oneopt->id}selected="selected"{/if}{/if}>{$oneopt->name}</option>
+				{/foreach}
+				</select>
+			</dd>
+		</dl>
+		<dl>
+			<dt>Оргсбор %:<span class="necessary-star">*</span></dt>
+			<dd><input type="text" id="orgRate" name="orgRate" value="{$this.zakObj->orgRate}" maxlength="255" data-validate="validate(digits, range(0, 20), maxlength(50))" /></dd>
+		</dl>
+		<dl>
+			<dt>Минималка (руб), или 0:<span class="necessary-star">*</span></dt>
+			<dd><input type="text" id="minAmount" name="minAmount" maxlength="255" value="{$this.zakObj->minAmount}" data-validate="validate(digits, max(1000000), maxlength(50))" /></dd>
+		</dl>
+		<dl>
+			<dt>Минималка (кол-во), или 0:<span class="necessary-star">*</span></dt>
+			<dd><input type="text" id="minValue" name="minValue" maxlength="255" value="{$this.zakObj->minValue}" data-validate="validate(digits, max(1000000), maxlength(50))" /></dd>
+		</dl>
+		<dl>
+			<dt>Валюта закупки:<span class="necessary-star">*</span></dt>
+			<dd>{html_options name=currency options=$this.currency id=currency selected=$this.zakObj->currency}</dd>
+		</dl>
+		<dl>
+			<dt>Кнопка "Заказать":</dt>
+			<dd><input type="checkbox" name="useForm" id="useForm" {if $this.zakObj->useForm == 'on'}checked="checked"{/if} /></dd>
+		</dl>
+        <dl>
+            <dt>Кнопка "Оплатить":</dt>
+            <dd><input type="checkbox" name="usePay" id="usePay" {if $this.zakObj->usePay == 'on'}checked="checked"{/if} /></dd>
+        </dl>
+
+		<dl id="note-dl">
+			<dt>Аннотация (краткое описание):<span class="necessary-star">*</span></dt>
+			<dd><textarea name="specialNotes" id="specialNotes" style="height: 100px; width: 70%;">{$this.zakObj->specialNotes}</textarea></dd>
+		</dl>
+
+		<!-- описание и заметка -->
+		<dl id="desc-dl">
+			<dt id="desc-dt">Описание закупки и условий (подробно):</dt>
+			<dd id="desc-dd"><br/><textarea name="description" id="description" style="height: 250px;">{$this.zakObj->description}</textarea></dd>
+		</dl>
+
+		<!-- фотографии головы закупки -->
+		<dl id="file-dl">
+			<dt id="file-dt">Картинка:</dt>
+			<dd id="file-dd">
+				<ul>
+					<li><input class="u-file" name="file1" type="file" /></li>
+				</ul>
+				{if $this.zakObj->picFile1}<img src='{$this.zakObj->picSrv1}/images/zheads/small/{$this.zakObj->picFile1}?ver={$this.zakObj->picVer1}' />{/if}
+			</dd>
+		</dl>
+
+		<!-- прайсы головы закупки -->
+		<!--
+		<dl id="file-dl-doc">
+			<dt id="file-dt-doc">Прайсы (doc,xls,pdf):</dt>
+			<dd id="file-dd-doc">
+				<ul>
+					<li><input class="u-file" name="doc1" type="file" /></li>
+					<li><input class="u-file" name="doc2" type="file" /></li>
+					<li><input class="u-file" name="doc3" type="file" /></li>
+				</ul>
+			</dd>
+		</dl>
+		-->
+
+		<dl id="submit-dl">
+			<dt></dt>
+			<dd><input type="submit" id="submitForm" value="Сохранить"/></dd>
+		</dl>
+
+	</div>
+
+</form>
+
+{/if}

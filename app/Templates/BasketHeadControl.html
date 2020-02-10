@@ -1,0 +1,223 @@
+{assign var=this value=$BasketHeadControl}
+
+{literal}
+<script type="text/javascript">
+    $().ready(function()
+    {
+        // заказ доставки в офис
+        $('.detailedlist').click(function (e) {
+            var gotOrderId = $(this).attr("id");
+            var pureOrderId = gotOrderId.split("detailedlist-").join("");
+            var officeId = $("#office-"+pureOrderId).val();
+            // ajax запрос
+            var gotdata = "job=usersaveoffice&orderid="+pureOrderId+"&officeid="+officeId;
+
+            $.ajax({
+                type: "POST",
+                dataType: "JSON",
+                url: "/index.php?show=ajax",
+                data: gotdata,
+                success: function(data)
+                {
+                    if (data.error)
+                    {
+                        alert(data.error);
+                        return false;
+                    }
+                    else
+                    {
+                        if (data == 'done')
+                        {
+                            alert("Доставка заказана");
+                            $('#paybasketbtn-'+pureOrderId).addClass('btn-yellow');
+                            $('#paybasketbtn-'+pureOrderId).html('Обновите страницу!');
+                        }
+                        else if (data == 'notsaved')
+                        {
+                            alert("Не удалось сохранить выбранный способ доставки");
+                        }
+                        return false;
+                    }
+                }
+            });
+        });
+
+        // получить данные офиса аяксом
+        $('.officeorderselect').change(function (e) {
+            var gotOrderId = $(this).attr("id");
+            var pureOrderId = gotOrderId.split("office-").join("");
+            var officeId = $("#office-"+pureOrderId).val();
+            // ajax запрос
+            var gotdata = "job=usergetoffice&officeid="+officeId;
+            $.ajax({
+                type: "POST",
+                dataType: "JSON",
+                url: "/index.php?show=ajax",
+                data: gotdata,
+                success: function (data) {
+                    if (data.error)
+                    {
+                        alert(data.error);
+                        return false;
+                    }
+                    else
+                    {
+                        if (officeId > 0)
+                        {
+                            $('#officeaddress-'+pureOrderId).val('-');
+                            $('#officeschedule-'+pureOrderId).val('-');
+                            $('#officeprice-'+pureOrderId).val('-');
+                            $('#officedescription-' + pureOrderId).show();
+                        }
+                        else
+                            $('#officedescription-'+pureOrderId).hide();
+
+                        // получен ответ
+                        $('#officeaddress-'+pureOrderId).html(data.address);
+                        $('#officeschedule-'+pureOrderId).html(data.schedule);
+                        $('#officeprice-'+pureOrderId).html(data.price);
+                        return false;
+                    }
+                }
+            });
+        });
+    });
+</script>
+{/literal}
+
+<h3>Корзина</h3>
+
+{if $this.orderHeadList}
+
+	{foreach from=$this.orderHeadList item=oneOrderHead}
+
+		{assign var=zakId value=$oneOrderHead->headId}
+		{assign var=oneZakObj value=$this.zakHeadList.$zakId}
+		{assign var=oneOrgId value=$oneZakObj->orgId}
+		{assign var=oneOrgObj value=$this.orgList.$oneOrgId}
+		{assign var=oneOrderList value=$this.orderLineList.$zakId}
+
+        <a name="bh{$oneZakObj->id}"></a>
+		<div class="thumbnail basket-orderhead">
+			<div class="basket-attantion">
+			</div>
+
+			<div class="basket-zakupka">
+				<div class="basket-zakupka-show">
+					<div class="basket-zakupka-pic">
+						<a href="{link show=viewcollection id=$oneZakObj->id}"><img class="img-thumbnail" src="{if $oneZakObj->picFile1}{$oneZakObj->picSrv1}/images/zheads/small/{$oneZakObj->picFile1}?ver={$oneZakObj->picVer1}{else}/images/zhempic.gif{/if}" /></a>
+					</div>
+					<div class="basket-zakupka-details">
+						<div class="basket-zakupka-name"><a href="{link show=viewcollection id=$oneZakObj->id}">{$oneZakObj->name}</a></div>
+						<div class="basket-zakupka-status">{if $oneOrderHead->status == 'STATUS_USER'}Выдано участнику<!-- TODO: добавить кнопку-глазик "скрыть от мужа" -->{else}{$oneZakObj->statusName}{/if}{if $oneZakObj->status == 'STATUS_STOP' || $oneZakObj->status == 'STATUS_CHECKED' || $oneZakObj->status == 'STATUS_ADDMORE' || $oneZakObj->status == 'STATUS_SEND' || $oneZakObj->status == 'STATUS_DELIVERED'}<br/><b>Код получателя:</b> <span style="font-weight: bold; color: red;">{$oneOrderHead->code}</span>{/if}</div>
+						<div class="basket-zakupka-org"><a href="{link show=vieworg id=$oneOrgObj->id}">{$oneOrgObj->nickName}</a></div>
+						<div class="basket-zakupka-annotation">
+							{$oneZakObj->specialNotes}
+						</div>
+					</div>
+				</div>
+
+				<div class="thumbnail basket-zakupka-params">
+					<dl>
+						<dt>Сумма:</dt>
+						<dd>{$oneOrderHead->optAmount|numberformat} р.</dd>
+						<dt>Оргсбор:</dt>
+						<dd>{$oneZakObj->orgRate} %</dd>
+						<dt>Итого:</dt>
+						<dd>{$oneOrderHead->orderSumAmount|numberformat} р.</dd>
+                        {if $oneOrderHead->opttoorgDlvrAmount > 0}
+                            <dt><span class="glyphicon glyphicon-road" aria-hidden="true" data-toggle="tooltip" data-placement="left" title="За доставку от оптовика до организатора"></span>&nbsp;:</dt>
+                            <dd>{$oneOrderHead->opttoorgDlvrAmount|numberformat} р.</dd>
+                        {/if}
+						{if $oneOrderHead->payAmount > 0}
+							<dt>Оплачено:</dt>
+							<dd>{$oneOrderHead->payAmount|numberformat} р.</dd>
+						{/if}
+						{if $oneOrderHead->payBackAmount > 0}
+							<dt>Возврат:</dt>
+							<dd>{$oneOrderHead->payBackAmount|numberformat} р.</dd>
+						{/if}
+						<!--
+						{if $oneOrderHead->needAmount > 0}
+							<dt>К оплате:</dt>
+							<dd>{$oneOrderHead->needAmount|numberformat} р.</dd>
+						{/if}
+						-->
+						{if $oneOrderHead->payHold > 0}
+							<dt>Обработка:</dt>
+							<dd>{$oneOrderHead->payHold|numberformat} р.</dd>
+						{/if}
+						{if $oneOrderHead->needAmount < 0}
+						{assign var=needBack value=$oneOrderHead->needAmount*-1}
+							<dt>Переплата:</dt>
+							<dd>{$needBack|numberformat} р.</dd>
+						{/if}
+					</dl>
+					{if $oneOrderHead->needAmount > 0 && $oneOrderHead->payHold == 0 && $oneZakObj->usePay == 'on'}<center><button type="button" id="paybasketbtn-{$oneOrderHead->id}" class="btn btn-success basketbtnopl">Оплатить {$oneOrderHead->needAmount|numberformat} р.</button></center>{/if}
+				</div>
+			</div>
+
+			{if $oneOrderList}
+				<div class="basket-products">
+					<table cellspacing="0" cellpadding="0" class="table table-striped table-bordered table-hover">
+						<tbody>
+							<tr>
+								<th style="text-align: center;">Действия</th>
+								<th style="text-align: center;">Товар</th>
+								<th style="text-align: center;">Информация</th>
+								<th style="text-align: center;">Цена,&nbsp;р.</th>
+								<th style="text-align: center;">Кол-во</th>
+								<th style="text-align: center;">Статус</th>
+							</tr>
+							{foreach from=$oneOrderList item=orderListItem}
+							<tr>
+								<td>{if $oneZakObj->status == 'STATUS_ACTIVE' || $oneZakObj->status == 'STATUS_ADDMORE' || ($oneZakObj->status == 'STATUS_CHECKED' && $orderListItem->status == 'STATUS_REJECT')}{if $orderListItem->stopDel == 0}<button id="ordlstitem-{$orderListItem->id}" class="btn btn-default btn-sm mpbtnremove" type="button"><span class="glyphicon glyphicon-trash"></span></button> {/if}{if $oneZakObj->status == 'STATUS_ACTIVE' || $oneZakObj->status == 'STATUS_ADDMORE'}<button id="ordedititem-{$orderListItem->id}" class="btn btn-default btn-sm ordedititem" type="button"><span class="glyphicon glyphicon-pencil"></span></button>{/if}{/if}</td>
+								<td>{if $orderListItem->zlId}{if $actor->isOrg && $oneZakObj->orgId == $actor->id}<a href="/index.php?show=orgviewzakupka&headid={$oneZakObj->id}#r{$orderListItem->zlId}">{else}<a href="/index.php?show=viewcollection&id={$oneZakObj->id}#r{$orderListItem->zlId}">{/if}{/if}{$orderListItem->prodName}{if $orderListItem->zlId}</a>{/if}{if $orderListItem->comment}<br/><i>{$orderListItem->comment}</i>{/if}</td>
+								<td>{if $orderListItem->prodArt}[{$orderListItem->prodArt}]{/if}{if $orderListItem->zlId} ({if $orderListItem->isFull == 1}полный {/if}ряд){/if}{if $orderListItem->size} {$orderListItem->size}{/if}{if $orderListItem->color} {$orderListItem->color}{/if}</td>
+								<td align="right">{$orderListItem->optPrice|numberformat}</td>
+								<td align="right">{$orderListItem->count}</td>
+								<td align="center">{assign var=orderStatus value=$orderListItem->status}{$this.zakListStatusNames.$orderStatus}</td>
+							</tr>
+							{/foreach}
+						</tbody>
+					</table>
+                    {assign var=orderId value=$oneOrderHead->id}
+                    {assign var=oneOfficeOrdered value=$this.officeOrders.$orderId}
+                    {assign var=gotOrderedOffice value=0}
+                    {assign var=orderedOfficeObj value=0}
+                    {if $this.offices}
+                        <div>
+                            <span>Способ получения заказа:</span>
+                            <select name="office" id="office-{$oneOrderHead->id}" class="officeorderselect">
+                                {foreach from=$this.offices item=oneOffice}
+                                    {if $orderedOfficeObj == 0}{assign var=orderedOfficeObj value=$oneOffice}{/if}
+                                    <option value="{$oneOffice->id}"{if $oneOfficeOrdered->officeId == $oneOffice->id} selected="selected"{assign var=gotOrderedOffice value=1}{assign var=orderedOfficeObj value=$oneOffice}{/if}>{$oneOffice->name}</option>
+                                {/foreach}
+                                <!-- здесь есть заказ в задисабленный офис -->
+                                {if $oneOfficeOrdered->officeId > 0 && $gotOrderedOffice == 0}
+                                    {assign var=gotOfficeId value=$oneOfficeOrdered->officeId}
+                                    {assign var=gotOneOffice value=$this.officesFromOrders.$gotOfficeId}
+                                    <option value="{$gotOneOffice->id}" selected="selected">{$gotOneOffice->name}</option>
+                                    {assign var=orderedOfficeObj value=$gotOneOffice}
+                                {/if}
+                            </select>
+                            <button id="detailedlist-{$oneOrderHead->id}" class="btn btn-default btn-sm detailedlist" type="button" title="Выбрать этот способ"><span class="glyphicon glyphicon-edit"></span></button>
+                        </div>
+
+                        {if $orderedOfficeObj != 0}
+                            <div class="officedescription" id="officedescription-{$oneOrderHead->id}">
+                                <p><b>Адрес:</b> <span id="officeaddress-{$oneOrderHead->id}">{if $orderedOfficeObj->address}{$orderedOfficeObj->address}{else}-{/if}</span></p>
+                                <p><b>Расписание:</b> <span id="officeschedule-{$oneOrderHead->id}">{if $orderedOfficeObj->schedule}{$orderedOfficeObj->schedule}{else}-{/if}</span></p>
+                                <p><b>Стоимость доставки:</b> <span id="officeprice-{$oneOrderHead->id}">{if $orderedOfficeObj->price > 0}{$orderedOfficeObj->price}</span> р.{else}-{/if}</p>
+                            </div>
+                        {/if}
+                    {/if}
+				</div>
+			{/if}
+
+		</div>
+	{/foreach}
+
+{else}
+	<h4>Активных заказов нет</h4>
+{/if}

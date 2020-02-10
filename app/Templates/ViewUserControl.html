@@ -1,0 +1,61 @@
+{assign var=this value=$ViewUserControl}
+
+{loadscript file='/wysibb/theme/default/wbbtheme.css' type='css'}
+
+{loadscript file='/wysibb/jquery.wysibb.min.js' type='js'}
+{loadscript file='/wysibb/lang/ru.js' type='js'}
+
+{literal}
+<script type="text/javascript">
+	$().ready(function()
+	{
+		var wbbOpt = {
+				buttons: 'bold,italic,underline,fontsize,fontcolor,smilebox,|,bullist,numlist,|,img,video,link',
+				allButtons: {
+					quote: {
+						transform: {
+							'<div class="quote">{SELTEXT}</div>':'[quote]{SELTEXT}[/quote]',
+							'<div class="quote"><cite>{AUTHOR} wrote:</cite>{SELTEXT}</div>':'[quote={AUTHOR}]{SELTEXT}[/quote]'
+						}
+					}
+				},
+				smilefind: "#smiley-box",
+				smileList: [
+					{title:CURLANG.sm1, img: '<img src="/images/smiles/sm1.png" class="sm">', bbcode:":)"},
+					{title:CURLANG.sm1, img: '<img src="/images/smiles/sm2.png" class="sm">', bbcode:":D"},
+					{title:CURLANG.sm3, img: '<img src="/images/smiles/sm3.png" class="sm">', bbcode:";)"},
+					{title:CURLANG.sm4, img: '<img src="/images/smiles/sm4.png" class="sm">', bbcode:":up:"},
+					{title:CURLANG.sm5, img: '<img src="/images/smiles/sm5.png" class="sm">', bbcode:":down:"},
+					{title:CURLANG.sm6, img: '<img src="/images/smiles/sm6.png" class="sm">', bbcode:":shock:"},
+					{title:CURLANG.sm7 ,img: '<img src="/images/smiles/sm7.png" class="sm">', bbcode:":angry:"},
+					{title:CURLANG.sm8, img: '<img src="/images/smiles/sm8.png" class="sm">', bbcode:":("},
+					{title:CURLANG.sm9, img: '<img src="/images/smiles/sm9.png" class="sm">', bbcode:":sick:"}
+				]
+		};
+
+		$("#message").wysibb(wbbOpt);
+
+	});
+
+</script>
+{/literal}
+
+<!-- подробная инфа об организаторе -->
+
+{if $this.curuser}
+	<h3>Участник:</h3>
+	<p><b>{$this.curuser->nickName}</b>{if $this.ts-$this.curuser->dateLastVisit < 300}<img src="/images/online.png" width="5" height="5" class="onlineimg" />{/if}</p>
+	{if $this.curuser->firstName}<p>Имя: <b>{$this.curuser->firstName}</b></p>{/if}
+	<form id="sendpvtmessage" name="sendpvtmessage" method="post" action="{link do=sendpvtmessage}">
+		<input type="hidden" name="userId" value="{$this.curuser->id}" />
+		<textarea id="message" name="message"></textarea><br />
+		<input class="comment-button" type="submit" value="Отправить сообщение" />
+	</form>
+{else}
+	<h3>Участник не найден</h3><br/>
+	{if $this.backurl}
+		<button id="basket-back-button" onclick="window.location.replace('/{$this.backurl}');">Веруться назад</button>
+	{else}
+		<button id="basket-back-button" onclick="history.back();">Вернуться назад</button>
+	{/if}
+{/if}

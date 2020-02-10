@@ -1,0 +1,23 @@
+{assign var=this value=$UserdigestfrequencyControl}
+
+<h4>Чаще или реже? Главное - регулярно!</h4>
+<p align="justify">Чтобы не пропустить важное событие по закупкам, в которых Вы участвуете, узнать о новых личных сообщениях, об открытии новых закупок ... Чтобы вовремя реагировать на ответы на Ваши комментарии в закупках, рекомендуем установить частоту рассылки дайджеста в значение <b>Каждый день</b>!</p>
+<p align="justify">Если за время Вашего отсутствия ничего не случится, то сайт Вам ничего не пришлёт.</p>
+<p align="justify"><b>Ничего лишнего</b> - это вообще наше кредо!</p>
+<p align="justify"><b>Итак ...</b> Я хочу получать уведомления о событиях не чаще чем:</p>
+<form action="{link do=userdigestfrequency}" id="user-freq" method="post">
+    <select name="freq">
+        <option value="1">Каждый день</option>
+        <option value="3">Раз в три дня</option>
+        <option value="7">Раз в неделю</option>
+        <option value="14">Раз в две недели</option>
+        <option value="30">Раз в месяц</option>
+        <option value="90">Раз в квартал</option>
+        <option value="182">Раз в полгода</option>
+        <option value="365">Раз в год?!</option>
+    </select>
+    <br/><br/><input type="submit" id="submitForm" value="Выбрать"/>
+</form>
+
+<br/>
+<p>PS: сейчас дайджест приходит Вам не чаще чем {if $this.actor->digestFrequency == 1}каждый день{/if}{if $this.actor->digestFrequency == 3}раз в три дня{/if}{if $this.actor->digestFrequency == 7}раз в неделю{/if}{if $this.actor->digestFrequency == 14}раз в две недели{/if}{if $this.actor->digestFrequency == 30}раз в месяц{/if}{if $this.actor->digestFrequency == 90}раз в квартал{/if}{if $this.actor->digestFrequency == 182}раз в полгода{/if}{if $this.actor->digestFrequency == 365}раз в год?!{/if}</p>

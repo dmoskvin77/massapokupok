@@ -1,0 +1,9 @@
+﻿Примеры использования класса
+require_once("class-ipgeo.php" );
+$ipList = new IPGeo("77.88.21.8,93.158.134.8,213.180.204.8" );
+или
+$ipList = new IPGeo(array("77.88.21.8","93.158.134.8","213.180.204.8" ));
+или
+$ipList = new IPGeo("77.88.21.8" );
+print "Город: " . $ipList->ip("77.88.21.8" ) . "<br>";
+print "Регион: " . $ipList->ip("77.88.21.8", "region" ) . "<br>";

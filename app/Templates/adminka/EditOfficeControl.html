@@ -1,0 +1,26 @@
+{assign var=this value=$EditOfficeControl}
+
+<h2>{if $this.office}Редактирование офиса{else}Создание нового офиса{/if}</h2>
+
+<form id="form" action="{alink do=saveoffice}" method="post">
+	<input type="hidden" name="id" value="{$this.office->id}" />
+	<dl>
+		<dt>Название:</dt>
+		<dd><input type="text" name="name" maxlength="255" value="{$this.office->name}"/></dd>
+	</dl>
+	<dl>
+		<dt>Адрес офиса:</dt>
+		<dd><textarea name="address" rows="6" cols="50">{$this.office->address}</textarea></dd>
+	</dl>
+    <dl>
+        <dt>Расписание работы:</dt>
+        <dd><textarea name="schedule" rows="6" cols="50">{$this.office->schedule}</textarea></dd>
+    </dl>
+    <dl>
+        <dt>Стоимость доставки:</dt>
+        <dd><input type="text" name="price" maxlength="255" value="{$this.office->price}"/></dd>
+    </dl>
+	<dl>
+		<dd><input id="submitOffice" type="submit" value="Сохранить"/></dd>
+	</dl>
+</form>

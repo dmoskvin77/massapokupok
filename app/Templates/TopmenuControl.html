@@ -1,0 +1,14 @@
+{assign var=this value=$TopmenuControl}
+<ul class="nav navbar-nav ms-top-menu mp-topline-menu">
+	{foreach from=$this.menu item=tmitem name=trufor}
+		<li>
+			<a href="{$tmitem.link}" title="{$tmitem.title}" class="{if $this.curPage == $tmitem.cname}active{/if}{if $tmitem.name == 'Войти'} bold llloginbutton{/if}{if $tmitem.name == 'Регистрация'} bold rrregisterbutton{/if}"><span>{$tmitem.name}</span>{if $tmitem.name == 'Сообщения' && $this.countNewMessages > 0} <span class="badge">{$this.countNewMessages}</span>{/if}{if $tmitem.name == 'Корзина' && $this.ordersCount > 0} <span class="badge">{$this.ordersCount}</span>{/if}</a>
+		</li>
+	{/foreach}
+    <li>
+        <a href="{$this.forumUrl}/" title="Форум" target="_blank"><span>Форум</span></a>
+    </li>
+    <li>
+        <a href="/page/name/help" title="О сайте"><span>О сайте</span></a>
+    </li>
+</ul>

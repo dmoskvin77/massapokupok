@@ -1,0 +1,45 @@
+{assign var=this value=$OrgViewOptControl}
+
+{if $this.optovik}
+
+	<div class="opt-view-table">
+		<h2>Просмотр оптовика</h2>
+		<dl>
+			<dt>Наименование:</dt>
+			<dd>{$this.optovik->name}</dd>
+		</dl>
+
+		{if $this.org && ($this.optovik->status == 'STATUS_MODER' || $this.optovik->status == 'STATUS_ACTIVE' || $this.optovik->status == 'STATUS_DECLINED')}
+		<dl>
+			<dt>Организатор:</dt>
+			<dd>{$this.org->nickName}</dd>
+		</dl>
+		{/if}
+
+		{if $this.urlList}
+			<dl>
+				<dt>Список сайтов:</dt>
+				<dd>
+					<ul>
+						{foreach from=$this.urlList item=onesite}
+						<li>{$onesite->url}{if $onesite->canParse && $onesite->control} <span style="color: green;" aria-hidden="true" class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="right" title="Есть парсер!"></span>{/if}</li>
+						{/foreach}
+					</ul>
+				</dd>
+			</dl>
+		{/if}
+
+		{if $this.optovik->userId == $this.actor->id && ($this.optovik->status == 'STATUS_ACTIVE' || $this.optovik->status == 'STATUS_DECLINED')}<a href="{link show=orgeditopt id=$this.optovik->id}">Редактировать</a> | <a href="{link do=orgunlinkopt id=$this.optovik->id}">Открепить</a> | <a href="{link show=orgparsers id=$this.optovik->id}">Парсеры</a>{/if}
+		{if !$this.optovik->userId || $this.optovik->status == 'STATUS_NEW' || $this.optovik->status == 'STATUS_FREE'}<a href="{link do=orglinkopt id=$this.optovik->id}">Закрепить</a>{/if}
+
+	</div>
+
+{else}
+
+	<h4>Указанный оптовик не найден</h4>
+
+{/if}
+
+<br/>
+<h4>Показать список:</h4>
+<p><a href="{link show=orgoptlist}">Доступные для закрепления</a> | <a href="{link show=orgoptlist view=my}">Только мои поставщики</a></p>

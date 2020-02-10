@@ -1,0 +1,71 @@
+{assign var=this value=$BasketControl}
+
+{literal}
+<script type="text/javascript">
+
+	function asksure()
+	{
+		return window.confirm('Вы уверены?');
+	}
+
+</script>
+{/literal}
+
+{if $this.basket}
+
+<h3>Содержимое корзины:</h3>
+
+	<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+		<tr>
+			<th>Артикул</th>
+			<th>Фото</th>
+			<th>Наименование</th>
+			<th>Цена</th>
+			<th>Кол-во</th>
+			<th>Сумма</th>
+			<th>Действия</th>
+		</tr>
+		{foreach item=bline from=$this.basket}
+			<tr class="{cycle values='color,'}">
+				<td>
+					{if $bline.orderArt AND $bline.orderArt != ""}
+						{$bline.orderArt}
+					{else}
+						{$bline.artNumber}
+					{/if}
+				</td>
+				<td>
+					{if $bline.proPic}
+						<img src="/images/products/small/{$bline.proPic}" alt="" />
+					{else}
+						(нет фото)
+					{/if}
+				</td>
+				<td>
+					{if $bline.orderName}
+						{$bline.orderName}
+					{else}
+						{$bline.name}. {if $bline.color}{$bline.colorsName}: {$bline.color|replace:'|':', '}{/if}{if $bline.color AND $bline.size}, {/if}{if $bline.size}{$bline.sizesName}: {$bline.size|replace:'|':', '}{/if}
+					{/if}
+				</td>
+				<td>{$bline.productPrice}</td>
+				<td>{$bline.productValue}</td>
+				<td>{$bline.productAmount}</td>
+				<td>
+					<a href="{link do=delbasketline id=$bline.id}">Удалить</a>
+				</td>
+			</tr>
+		{/foreach}
+	</table>
+
+<p><!-- --></p>
+
+<button onclick="window.location.replace('{link do=basketcheckout}');"><b>ЗАКАЗАТЬ ТОВАРЫ</b></button>
+
+<button onclick="if (asksure() == true) window.location.replace('{link do=delbasket}');">Очистить корзину</button>
+
+{else}
+
+	<h3>Корзина пуста</h3>
+
+{/if}

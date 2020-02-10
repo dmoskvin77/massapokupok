@@ -1,0 +1,69 @@
+{assign var=this value=$ZHControl}
+
+<!-- закупка с внешнего сайта -->
+<h2>Закупка</h2>
+
+{if $this.zh->name}<h3>{$this.zh->name}</h3>{/if}
+
+{if $this.desc}<p>{$this.desc}</p>{/if}
+
+{if $this.curorg}
+	{if $this.curorg->login AND $this.curorg->nickName AND $this.curorg->nickName != $this.curorg->vkId}
+		<h4>Организатор: <a href="{link show=vieworg id=$this.curorg->id}">{$this.curorg->nickName}</a></h4>
+	{else}
+		{if $this.curorg->vkId}
+			<h4>Организатор: <a href="http://vkontakte.ru/id{$this.curorg->vkId}" target="_blank">{$this.curorg->vkFirstName} {$this.curorg->vkLastName}</a></h4>
+		{/if}
+	{/if}
+{/if}
+
+{if $this.zh}
+	<h4>Наценка организатора: {$this.zh->orgRate}%</h4>
+	{if $this.zh->minAmount}<h3>Сумма набора: {$this.zh->minAmount} {if $this.zh->currency}{$this.zh->currency}{else}руб{/if}.</h3>{/if}
+	{if $this.zh->minValue}<h3>Мин. кол-во: {$this.zh->minValue}</h3>{/if}
+	{if $this.pageUrl}<h4>Сайт с товарами: {$this.pageUrl}</h4>{/if}
+{/if}
+
+{if $this.curopt}<h4>Оптовик: {$this.curopt->name}</h4>{/if}
+
+
+{if $this.zlines}
+
+	<h3>Ряды закупки (строки)</h3>
+
+		<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+			<tr>
+				<th>ID</th>
+				<th>Фото</th>
+				<th>Артикул</th>
+				<th>Наименование</th>
+				<th>Цена опт.</th>
+				<th>Цена покупки</th>
+			</tr>
+			{foreach item=zline from=$this.zlines}
+				<tr class="{cycle values='color,'}">
+					<td>{$zline.zlid}</td>
+					<td>
+						{if $zline.proPic}
+							<img src="/images/products/small/{$zline.proPic}" alt="" />
+						{else}
+							(нет фото)
+						{/if}
+					</td>
+					<td>{$zline.art}</td>
+					<td>{$zline.proname}</td>
+					<td>{$zline.wpr}</td>
+					<td>{$zline.fpr}</td>
+				</tr>
+			{/foreach}
+		</table>
+
+{else}
+
+	<h3>У данной закупки ещё не добавлены ряды</h3>
+
+{/if}
+
+<!-- галерея -->
+
+<button onclick="window.close(); return false;">Закрыть окно</button>

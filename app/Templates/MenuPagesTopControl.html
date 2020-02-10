@@ -1,0 +1,12 @@
+{assign var=this value=$MenuPagesTopControl}
+
+{if $this.menu}
+<h3>Информация:</h3>
+
+<ul class="menupages-top">
+	{foreach from=$this.menu item=menuitem}
+		<li><a href="{link show=page name=$menuitem.alias}">{$menuitem.title}</a></li>
+	{/foreach}
+</ul>
+
+{/if}

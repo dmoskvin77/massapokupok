@@ -1,0 +1,56 @@
+{assign var=this value=$OrgimportzakupkaControl}
+
+{literal}
+<script type="text/javascript">
+    $().ready(function()
+    {
+
+    });
+
+</script>
+{/literal}
+
+<h4>Загрузка рядов из файла в закупку <a href="{link show=orgviewzakupka headid=$this.zakObj->id}" target="_blank">{$this.zakObj->name}</a>:</h4>
+
+<div class="well well-lg predator-representing" style="text-align: justify;">
+    <p><b><i>Загрузка через <a href="http://sliza.ru/" target="_blank">sliza.ru</a>:</i></b></p>
+    <p>
+        1) Скачайте и прочитайте инструкцию <a href="/storage/docs/sliza.pdf" target="_blank">Как сформировать CSV файл sliza</a><br/>
+        2) Загрузите сформированный в sliza файл CSV.<br/>
+    </p>
+</div>
+
+<div>
+    <form id="orgimportzakupkafilesliza" name="orgimportzakupkafilesliza" method="post" action="{link do=orgimportzakupkafile mode=sliza}" enctype="multipart/form-data">
+        <input type="hidden" name="headid" value="{$this.headid}" />
+        <input type="hidden" name="token" value="{$this.token}" />
+        <p style="float: left; margin-right: 7px; margin-top: 4px;">Выбрать CSV файл sliza: </p> <input type="file" name="csvfile" id="csvfilesliza"><br/>
+        <input class="comment-button" type="submit" value="Загрузить файл sliza CSV" />
+    </form>
+</div>
+
+<br/><br/>
+<div class="well well-lg predator-representing" style="text-align: justify;">
+<p><b><i>Загрузка произвольная:</i></b></p>
+<p>
+    1) Файл с товарами должен быть с расширением CSV,<br/>
+    2) Описание товара должно быть без переноса строк в формате html (в качестве перевода строк используйте тег &lt;br&gt;),<br/>
+    3) Картинка должна передаваться в виде ссылки, желательно чтобы размер картинки не превышал 500 точек (по ширине или высоте),<br/>
+    4) Ряды записываются как размеры или цвета через запятую, например: <b>42,43,44</b>,<br/>
+    5) Для обозначения цены записывается только цифра (без <b>р.</b> или <b>руб.</b>),<br/>
+    6) Желательная последовательность данных следующая:<br/><br/>
+    <b>наименование товара;артикул;цена;ссылка на картинку;описание в html;размеры или цвета через запятую</b><br/><br/>
+    7) Обязательные поля: <b>наименование товара;артикул;цена</b><br/>
+    8) Строки в файле должны заканчиваться обычном переводом строки.<br/>
+</p>
+</div>
+
+<!-- форма для загрузки файла CSV - это афигенно страшно! ведь можно залить эксплолит! аааа-ааа-аааа-аааааа-аааааа-аааааааааааа!!!! -->
+<div>
+    <form id="orgimportzakupkafile" name="orgimportzakupkafile" method="post" action="{link do=orgimportzakupkafile}" enctype="multipart/form-data">
+        <input type="hidden" name="headid" value="{$this.headid}" />
+        <input type="hidden" name="token" value="{$this.token}" />
+        <p style="float: left; margin-right: 7px; margin-top: 4px;">Выбрать CSV файл: </p> <input type="file" name="csvfile" id="csvfile"><br/>
+        <input class="comment-button" type="submit" value="Загрузить файл" />
+    </form>
+</div>

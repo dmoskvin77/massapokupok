@@ -1,0 +1,31 @@
+{assign var=this value=$ManageyakassaControl}
+
+<h2>Модерация кнопок оплаты Яндекс</h2>
+
+{if $this.buttonlist}
+
+	<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+		<tr>
+			<th>Пользователь</th>
+			<th>Кнопка</th>
+			<th>Действия</th>
+		</tr>
+		{foreach item=yabutton from=$this.buttonlist}
+        {assign var=userId value=$yabutton->userId}
+        {assign var=userObj value=$this.users.$userId}
+
+			<tr class="{cycle values='color,'}">
+				<td><a href="{alink show=user id=$userObj->id}">{$userObj->nickName}</a></td>
+				<td>{$yabutton->buttonCode}</td>
+				<td>
+					<a href="{alink do=aproveyabutton id=$yabutton->id}">Одобрить</a> | <a href="{alink do=removeyabutton id=$yabutton->id}">Отклонить</a>
+				</td>
+			</tr>
+		{/foreach}
+	</table>
+
+{else}
+
+	<h3>Нет кнопок, ожидающих модерацию</h3>
+
+{/if}

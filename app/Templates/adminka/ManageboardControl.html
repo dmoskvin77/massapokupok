@@ -1,0 +1,33 @@
+{assign var=this value=$ManageboardControl}
+
+<h2>Модерация объявлений</h2>
+
+{if $this.boardadlist}
+
+	<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+		<tr>
+			<th>Дата</th>
+			<th>Пользователь</th>
+			<th>Объявление</th>
+			<th>Действия</th>
+		</tr>
+		{foreach item=boardad from=$this.boardadlist}
+        {assign var=userId value=$boardad->userId}
+        {assign var=userObj value=$this.users.$userId}
+
+			<tr class="{cycle values='color,'}">
+				<td>{$boardad->dateCreate|dateformat:"d M Y H:i"}</td>
+				<td><a href="{alink show=user id=$userObj->id}">{$userObj->nickName}</a></td>
+				<td><a href="{alink show=boardad id=$boardad->id}" target="_blank">{$boardad->name}</a></td>
+				<td>
+					<a href="{alink do=aproveboardad id=$boardad->id}">Одобрить</a> | <a href="{alink do=removeboardad id=$boardad->id}">Отклонить</a>
+				</td>
+			</tr>
+		{/foreach}
+	</table>
+
+{else}
+
+	<h3>Нет комментариев, ожидающих модерацию</h3>
+
+{/if}

@@ -1,0 +1,14 @@
+{assign var=this value=$EdituserControl}
+
+<h2>Редактирование пользователя</h2>
+
+<form id="form" action="{alink do=saveuser}" method="post">
+	<input type="hidden" name="userId" value="{$this.user->id}" />
+	<dl>
+		<dt>% орг сбора (десятичный разделитель - точка):</dt>
+		<dd><input type="text" name="orgPersent" maxlength="255" value="{$this.user->orgPersent}"/></dd>
+	</dl>
+	<dl>
+		<dd><input id="submitUser" type="submit" value="Сохранить"/></dd>
+	</dl>
+</form>

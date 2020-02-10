@@ -1,0 +1,54 @@
+{assign var=this value=$OrgParsersControl}
+
+{if $this.optovik}
+
+	<div class="opt-view-table">
+		<h2>Парсеры</h2>
+
+        <p><b>Парсер</b> позволяет добавить ряды в закупку с меньшим количеством усилий, чем при ручном вводе данных. Парсер получит данные с сайта поставщика и засунет их в выбранную закупку.</p>
+
+		<dl>
+			<dt>Оптовик:</dt>
+			<dd>{$this.optovik->name}</dd>
+		</dl>
+
+		{if $this.urlListNoParser}
+        <dl>
+            <dt>Заказать парсер:</dt>
+            <dd>
+                <form action="/index.php" method="get">
+                    <input type="hidden" name="do" value="orgorderparser" />
+                    <input type="hidden" name="id" value="{$this.optovik->id}" />
+                    <select name="urlid">
+                    {foreach from=$this.urlListNoParser item=onesite}
+                        <option value="{$onesite->id}">{$onesite->url}</option>
+                    {/foreach}
+                    </select>
+                    <input type="submit" value="Заказать*">
+                </form>
+            </dd>
+        </dl>
+        <p>* создание парсера платная услуга.</p><br/>
+		{/if}
+
+        {if $this.urlListEstParser}
+        <dl>
+            <dt>Запустить парсер:</dt>
+            <dd>
+                <ul>
+                    {foreach from=$this.urlListEstParser item=onesite}
+                    <li><a href="/index.php?show={$onesite->control}">{$onesite->url}</a>{if $onesite->canParse && $onesite->control} <span style="color: green;" aria-hidden="true" class="glyphicon glyphicon-ok" data-toggle="tooltip" data-placement="right" title="Есть парсер!"></span>{/if}</li>
+                    {/foreach}
+                </ul>
+            </dd>
+        </dl>
+        <p>* переход на страницу запуска парсера. Необходимо наличие закупки на редактировании для загрузки в неё рядов из парсера.</p>
+        {/if}
+
+	</div>
+
+{else}
+
+	<h4>Указанный оптовик не найден</h4>
+
+{/if}

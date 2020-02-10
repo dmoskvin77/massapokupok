@@ -1,0 +1,17 @@
+{assign var=this value=$GetsomemessagesControl}{if $this.messAll}
+    {if $this.iteration == 1}
+        <center><button onclick="getsomemessages('mindate_{$this.mindate}_{$this.user->id}_{$this.dlgObj->id}_2')">За целый год</button></center>
+        <br/>
+    {/if}
+    {if $this.iteration == 2}
+        <center><button onclick="getsomemessages('mindate_{$this.mindate}_{$this.user->id}_{$this.dlgObj->id}_3')">Ещё сообщений?</button></center>
+        <br/>
+    {/if}
+    {foreach from=$this.messAll item=oneMsg}
+    {assign var=showuserid value=0}
+    <div class="msg-container-{if $oneMsg->userToId}left{else}right{/if}{if ($oneMsg->id <= $this.dlgObj->lastReadId12 && $this.actorId == $showuserid) OR ($oneMsg->id <= $this.dlgObj->lastReadId21 && $this.actorId == $showuserid)}{else} unread-pvtmsg{/if}" id="pvtmsg-{$oneMsg->id}">
+        <div class="msg-from-{if $oneMsg->userToId}left{else}right{/if}">{if $oneMsg->userFromId}{$this.user->nickName}{if $this.ts-$this.user->dateLastVisit < 300}<img src="/images/online.png" width="5" height="5" class="onlineimg" />{/if}{assign var=showuserid value=$this.user->id}{/if}{if $oneMsg->userToId}{$this.actor->nickName}{assign var=showuserid value=$this.actor->id}{/if}<br/><span class="msg-dt-left">{$oneMsg->dateCreate|dateformat:'d.m.Y, в H:i'}</span>{if ($oneMsg->id <= $this.dlgObj->lastReadId12 && $this.actorId == $showuserid) OR ($oneMsg->id <= $this.dlgObj->lastReadId21 && $this.actorId == $showuserid)}<br/><div class="ms-read">(прочитано)</div>{/if}</div>
+        <div class="msg-boby-{if $oneMsg->userToId}left{else}right{/if} bubble-{if $oneMsg->userToId}left{else}right{/if} bbl-color-{if ($oneMsg->userFromId && $this.user->isOrg) || ($oneMsg->userToId && $this.actor->isOrg)}org{else}user{/if}-{if $oneMsg->userToId}left{else}right{/if}{if ($oneMsg->id <= $this.dlgObj->lastReadId12 && $this.actorId == $showuserid) OR ($oneMsg->id <= $this.dlgObj->lastReadId21 && $this.actorId == $showuserid)}{else}-unread{/if}">{$oneMsg->message|bbcode}</div>
+    </div>
+    {/foreach}
+{/if}

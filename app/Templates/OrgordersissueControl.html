@@ -1,0 +1,95 @@
+{assign var=this value=$OrgordersissueControl}
+
+{loadscript file='/css/ketchup/jquery.ketchup.css' type='css'}
+
+{loadscript file='/js/ketchup/jquery.ketchup.all.min.js' type='js'}
+
+{literal}
+<script type="text/javascript">
+	$().ready(function()
+	{
+        $('#showbycode').ketchup();
+
+        $('.showbyuser').click(function(e)
+        {
+            var gotId = $(this).attr("id")+"_div";
+            if ($('#'+gotId).is(":visible"))
+                $('#'+gotId).hide();
+            else
+                $('#'+gotId).show();
+
+        });
+
+        // выдать заказ
+        $('.issueorder').click(function(e)
+        {
+            if (!confirm("Уверены что надо выдать заказ?"))
+                return false;
+
+            var gotPayId = $(this).attr("id");
+            // чистый id
+            var purePayId = gotPayId.split("issueorder_").join("");
+
+            window.location.href = "/index.php?do=orgordersissue&id="+purePayId;
+        });
+
+	});
+
+</script>
+{/literal}
+
+{if !$this.code}
+    <h4>Раздача заказов:</h4>
+    <form name="showbycode" id="showbycode" action="{link show=orgordersissue}" method="get">
+    Введите код получателя: <input type="text" name="code" id="code" data-validate="validate(digits, range(100, 999))" /> <input type="submit" value="Поиск" />
+    </form>
+{else}
+    {if $this.userList}
+        <h4>Найдено по коду получателя <b>{$this.code}</b>:</h4>
+        {foreach from=$this.userList item=oneUser}
+            <a href="#" title="" class="showbyuser" id="codeuser_{$oneUser->id}">{$oneUser->nickName}</a><br/>
+            <!-- расшифровка (детализация) -->
+            <div class="showbyuserdiv" id="codeuser_{$oneUser->id}_div"><br/>
+            {assign var=userid value=$oneUser->id}
+            {assign var=orders value=$this.ordersByOrg.$userid}
+            {foreach from=$orders item=oneorder}
+                <!-- тут можно выяснить долги если есть: oneorder -->
+                {assign var=headid value=$oneorder->headId}
+                <!-- это закупка со всеми её данными: zhObj -->
+                {assign var=zhObj value=$this.headDataById.$headid}
+                <!-- а это строки заказов: orderlines -->
+                {assign var=orderid value=$oneorder->id}
+                {assign var=userlines value=$this.orderList.$userid}
+                {assign var=orderlines value=$userlines.$orderid}
+
+                <b>Закупка:</b> <a href="{link show=viewcollection id=$zhObj->id}" target="_blank">{$zhObj->name}</a><br/>
+                Дата заказа: {$oneorder->dateCreate|dateformat:"d M Y"}<br/>
+                Кол-во товаров: {$oneorder->confirmedProdCount}<br/>
+                Сумма заказа: {$oneorder->orderSumAmount|numberformat} р.<br/>
+                {if $oneorder->needAmount}Долг: <span style="font-weight: bold; color: red; ">{$oneorder->needAmount|numberformat} р.</span><br/>{/if}
+                <button type="button" id="issueorder_{$oneorder->id}" class="btn btn-success issueorder">Выдать заказ</button><br/><br/>
+                <table cellspacing="0" cellpadding="0" class="table table-striped table-bordered table-hover">
+                    <tbody>
+                    <tr>
+                        <th style="text-align: center;">Товар</th>
+                        <th style="text-align: center;">Кол-во</th>
+                        <th style="text-align: center;">Размер</th>
+                        <th style="text-align: center;">Цвет</th>
+                    </tr>
+                {foreach from=$orderlines item=oneline}
+                <tr>
+                    <td>{$oneline->prodName}</td>
+                    <td align="right">{$oneline->count}</td>
+                    <td align="center">{$oneline->size}</td>
+                    <td align="center">{$oneline->color}</td>
+                </tr>
+                {/foreach}
+                    </tbody>
+                </table><br/>
+            {/foreach}<br/>
+            </div>
+        {/foreach}
+    {else}
+        <h4>По заданному коду не найдено заказов к выдаче</h4>
+    {/if}
+{/if}

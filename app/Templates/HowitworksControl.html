@@ -1,0 +1,12 @@
+{assign var=this value=$HowitworksControl}
+
+{foreach from=$this.contlist item=citem}
+<h2>{$citem->title}</h2>
+<p><!-- --></p>
+{if $citem->text != "<p>-</p>"}
+<div class="cms-text">{$citem->text}</div>
+<p><!-- --></p>
+{/if}
+{/foreach}
+
+<p><!-- --></p>

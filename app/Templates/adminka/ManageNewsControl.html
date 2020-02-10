@@ -1,0 +1,34 @@
+{assign var=this value=$ManageNewsControl}
+
+<h2>Управление новостями</h2>
+
+<div class="create">
+	<input type="button" onclick="window.location='{alink show=editnews}'" value="Создать новость" />
+</div>
+
+{if $this.news}
+<br/>
+<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+	<tr>
+		<th>ID</th>
+		<th>Заголовок</th>
+		<th>Текст</th>
+		<th>Дата создания</th>
+		<th>Действие</th>
+	</tr>
+	{foreach item=new from=$this.news}
+		<tr class="{cycle values='color,'}">
+			<td>{$new->id}</td>
+			<td>{$new->subject}</td>
+			<td>{$new->body|forcewrap:0:300:false|nl2br}</td>
+			<td>{$new->showDate|dateformat}</td>
+			<td>
+				<a href="{alink show=editnews newsid=$new->id}">Редактировать</a> |
+				<a onclick="return confirm('Удалить?');" href="{alink do=deletenews newsid=$new->id}">Удалить</a>
+			</td>
+		</tr>
+	{/foreach}
+</table>
+
+{pager total=$this.total per=$this.perPage}
+{/if}

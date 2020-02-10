@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+{formrestore id="operator-login"}
+<head>
+<title>{$pageTitle} {revision}</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,700">
+{loadscript file='/css/adminka.css' type='css'}
+{loadscript file='/css/adminkalogin.css' type='css'}
+<!--[if lte IE 6]>{loadscript file='/css/adminkaie6.css' type='css'}<![endif]-->
+{loadscript file="/js/jquery.js" type="js"}
+</head>
+<body>
+{displayerror}
+<div id="login">
+	<form name="form-login" id="operator-login" action="{alink do=operatorlogin}" method="post">
+		<span class="fontawesome-user"></span>
+		<input type="text" id="email" name="email" placeholder="Email">
+		<span class="fontawesome-lock"></span>
+		<input type="password" name="password" id="password" placeholder="Password">
+		<input type="submit" value="Login">
+	</form>
+</div>
+{include file=$CURRENT_CONTROL_TEMPLATE}
+</body>
+</html>

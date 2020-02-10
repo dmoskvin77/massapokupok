@@ -1,0 +1,39 @@
+{assign var=this value=$EditcategoryControl}
+{formrestore id="edit-category"}
+
+{loadscript file='/css/ketchup/jquery.ketchup.css' type='css'}
+{loadscript file='/js/ketchup/jquery.ketchup.all.min.js' type='js'}
+
+{literal}
+<script type="text/javascript">
+	$().ready(function()
+	{
+		$('#edit-category').ketchup();
+
+	});
+
+</script>
+{/literal}
+
+<h2>Редактирование категории</h2>
+
+<form id="edit-category" method="post" action="{alink do=savecategory}">
+	<input type="hidden" name="id" value="{$this.category->id}"/>
+	<dl>
+		<dt>Категория:</dt><dd><input type="text" id="name" data-validate="validate(required, maxlength(255))" name="name" value="{$this.category->name}"/></dd>
+		{if $this.all}
+		<dt>Родитель:</dt><dd>
+			<select name="parentId">
+			<option value="0">---</option>
+			{foreach from=$this.all item=one}
+				{if $this.category->id != $one->id}
+				<option value="{$one->id}" {if $one->id == $this.category->parentId}selected="selected"{/if}>{$one->name}</option>
+				{/if}
+			{/foreach}
+			</select>
+		</dd>
+		{/if}
+	</dl>
+	<input id="submitCategory" type="submit" value="Сохранить"/>
+
+</form>

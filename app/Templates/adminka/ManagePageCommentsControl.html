@@ -1,0 +1,30 @@
+{assign var=this value=$ManagePageCommentsControl}
+
+<h2>Модерация комментариев</h2>
+
+{if $this.commlist}
+
+	<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+		<tr>
+			<th>Дата</th>
+			<th>Пользователь</th>
+			<th>Комментарий</th>
+			<th>Действия</th>
+		</tr>
+		{foreach item=comm from=$this.commlist}
+			<tr class="{cycle values='color,'}">
+				<td>{$comm.dateCreate|dateformat:"d M Y"}</td>
+				<td><a href="{alink show=user id=$comm.userId}">{$comm.nick}</a></td>
+				<td>{$comm.body}</td>
+				<td>
+					<a href="{alink do=aprovecocomm id=$comm.id}">Одобрить</a> | <a href="{alink do=removecocomm id=$comm.id}">Удалить</a>
+				</td>
+			</tr>
+		{/foreach}
+	</table>
+
+{else}
+
+	<h3>Нет комментариев, ожидающих модерацию</h3>
+
+{/if}

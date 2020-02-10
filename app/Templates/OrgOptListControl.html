@@ -1,0 +1,83 @@
+{assign var=this value=$OrgOptListControl}
+
+<p><a href="{link show=orgoptlist}">Доступные для закрепления</a> | <a href="{link show=orgoptlist view=my}">Только мои поставщики</a></p>
+
+<br/>
+<form method="get">
+	Проверить ссылку: <input type="text" name="url" value="{$this.url}" /> <input type="submit" value="Поиск" />
+</form>
+
+{if $this.getOptovik}
+<h4>Найден оптовик:</h4>
+<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+	<tr>
+		<th>Наименование</th>
+		<th>Сайты</th>
+		<th>Действия</th>
+	</tr>
+	<tr>
+		<td>{$this.getOptovik->name}</td>
+		<td>
+			{if $this.urlListSearch}
+				{foreach from=$this.urlListSearch item=oneurl}
+					{$oneurl->url} &nbsp;
+				{/foreach}
+			{/if}
+		</td>
+		<td>
+			<a href="{link show=orgviewopt id=$this.getOptovik->id}">Информация</a>
+			{if $this.getOptovik->userId == $this.actor->id && ($this.getOptovik->status == 'STATUS_ACTIVE' || $this.getOptovik->status == 'STATUS_DECLINED')} | <a href="{link show=orgeditopt id=$this.getOptovik->id}">Редактировать</a> | <a href="{link do=orgunlinkopt id=$this.getOptovik->id}">Открепить</a>{/if}
+			{if !$this.getOptovik->userId || $this.getOptovik->status == 'STATUS_NEW' || $this.getOptovik->status == 'STATUS_FREE'} | <a href="{link do=orglinkopt id=$this.getOptovik->id}">Закрепить</a>{/if}
+		</td>
+	</tr>
+</table>
+{else}
+	{if $this.url}<b>Не найдено ...</b>{/if}
+{/if}
+<br/>
+
+{if $this.optList}
+
+{if $this.view == 'my'}
+	<h2>Мои поставщики</h2>
+{else}
+	<h2>Доступные поставщики</h2>
+{/if}
+
+<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+	<tr>
+		<th>Наименование</th>
+		<th>Сайты</th>
+		<th>Действия</th>
+	</tr>
+
+	{foreach item=opt from=$this.optList}
+		<tr>
+			<td>{$opt->name}</td>
+			<td>
+				{assign var=gotoptid value=$opt->id}
+				{if $this.urlList.$gotoptid}
+					{foreach from=$this.urlList.$gotoptid item=oneurl}
+						{$oneurl->url} &nbsp;
+					{/foreach}
+				{/if}
+			</td>
+			<td>
+				<a href="{link show=orgviewopt id=$opt->id}">Информация</a>
+				{if $opt->userId == $this.actor->id && ($opt->status == 'STATUS_ACTIVE' || $opt->status == 'STATUS_DECLINED')} | <a href="{link show=orgeditopt id=$opt->id}">Редактировать</a> | <a href="{link do=orgunlinkopt id=$opt->id}">Открепить</a>{/if}
+				{if !$opt->userId || $opt->status == 'STATUS_NEW' || $opt->status == 'STATUS_FREE'} | <a href="{link do=orglinkopt id=$opt->id}">Закрепить</a>{/if}
+			</td>
+		</tr>
+	{/foreach}
+
+</table>
+
+<br/><br/>
+<p>Вы можете <a href="{link show=orgeditopt}">добавить нового</a>.</p>
+
+{else}
+
+    {if $this.view != 'my'}<h4>Нет доступных для закрепления поставщиков</h4>{/if}
+	<h4><a href="{link show=orgeditopt}">Добавить нового поставщика</a>.</h4>
+
+{/if}

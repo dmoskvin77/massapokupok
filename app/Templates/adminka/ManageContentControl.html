@@ -1,0 +1,36 @@
+{assign var=this value=$ManageContentControl}
+
+<h2>Управление контентом</h2>
+
+<div class="man-con-create">
+	<input type="button" onclick="window.location='{alink show=editcontent}'" value="Создать страницу" />
+</div>
+
+{if $this.list}
+<br/>
+<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0">
+
+	<tr>
+		<th>Заголовок</th>
+		<th>Положение в меню</th>
+		<th>Действие</th>
+	</tr>
+
+	{foreach from=$this.list item=item name=pages}
+	<tr class="{cycle values='color,'}">
+		<td>
+			<a target="_blank" href="{link show=page name=$item->alias}">{$item->title}</a>
+		</td>
+		<td>
+			{assign var=menutype value=$item->menu}
+			{$this.menuTypeList.$menutype}
+		</td>
+		<td class="edit">
+			<a href="{alink show=editcontent id=$item->id}">Редактировать</a> |
+			<a onclick="return confirm('Удалить?');" href="{alink do=deletecontent id=$item->id}">Удалить</a>
+		</td>
+	</tr>
+	{/foreach}
+
+</table>
+{/if}

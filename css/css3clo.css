@@ -1,0 +1,200 @@
+body {
+	margin:0;
+	padding:0;
+	border:0;			/* This removes the border around the viewport in old versions of IE */
+	width:100%;
+	background:#fff;
+	min-width:600px;		/* Minimum width of layout - remove line if not required */
+					/* The min-width property does not work in old versions of Internet Explorer */
+	font-size:13px;
+	font-family: Arial, sans-serif;
+}
+a {
+	color:#9a719d;
+}
+a:hover {
+	color:#fff;
+	background:#9a719d;
+	text-decoration:none;
+}
+h1, h2, h3 {
+	margin:.8em 0 .2em 0;
+	padding:0;
+}
+p {
+	margin:.4em 0 .8em 0;
+	padding:0;
+}
+#ads img {
+	display:block;
+	padding-top:10px;
+}
+
+/* Header styles */
+#header {
+	clear:both;
+	float:left;
+	width:100%;
+	margin-top: -137px;
+}
+#header {
+	border-bottom:1px solid #C5C5C5;
+}
+#header p,
+#header h1,
+#header h2 {
+	padding: 7px 15px 0 15px;
+	margin: 0;
+	vertical-align: top;
+}
+#header ul {
+	clear:left;
+	float:left;
+	width:100%;
+	list-style:none;
+	margin:10px 0 0 0;
+	padding:0;
+}
+#header ul li {
+	display:inline;
+	list-style:none;
+	margin:0;
+	padding:0;
+}
+#header ul li a {
+	display:block;
+	float:left;
+	margin:0 0 0 2px;
+	padding:3px 10px;
+	text-align:center;
+	background:#eee;
+	color:#000;
+	text-decoration:none;
+	position:relative;
+	left:15px;
+	line-height:19px;
+}
+#header ul li a:hover {
+	background:#aaa;
+	color:#fff;
+}
+#header ul li a.active,
+#header ul li a.active:hover {
+	color:#fff;
+	background:#000;
+	font-weight:bold;
+}
+#header ul li a span {
+	display:block;
+}
+/* 'widths' sub menu */
+#layoutdims {
+	clear:both;
+	background:#eee;
+	border-top:2px solid #222;
+	margin:0;
+	padding-bottom:6px !important;
+	padding-right:15px !important;
+	padding-top:4px !important;
+	text-align:right;
+	vertical-align: top;
+	height: 16px;
+}
+/* column container */
+.colmask {
+	position:relative;	/* This fixes the IE7 overflow hidden bug */
+	clear:both;
+	float:left;
+	width:100%;			/* width of whole page */
+	overflow:hidden;		/* This chops off any overhanging divs */
+}
+/* common column settings */
+.colright,
+.colmid,
+.colleft {
+	float:left;
+	width:100%;			/* width of page */
+	position:relative;
+}
+.col1,
+.col2,
+.col3 {
+	float:left;
+	position:relative;
+	overflow:hidden;
+	padding-top: 12px;
+	padding-bottom: 30px;
+}
+/* 3 Column settings */
+.threecol {
+	background:#e7e7e7;		/* right column background colour */
+}
+.threecol .colmid {
+	right:21%;			/* width of the right column */
+	background:#fff;		/* center column background colour */
+	border-right: 2px solid #C5C5C5;
+}
+.threecol .colleft {
+	right:58%;			/* width of the middle column */
+	background:#e7e7e7;	/* left column background colour */
+	border-right: 2px solid #C5C5C5;
+	min-height: 400px;
+}
+.threecol .col1 {
+	width:54%;			/* width of center column content (column width minus padding on either side) */
+	left:102%;			/* 100% plus left padding of center column */
+}
+.threecol .col2 {
+	width:17%;			/* Width of left column content (column width minus padding on either side) */
+	left:27%;			/* width of (right column) plus (center column left and right padding) plus (left column left padding) */
+}
+.threecol .col3 {
+	width:17%;			/* Width of right column content (column width minus padding on either side) */
+	left:89%;			/* Please make note of the brackets here:
+					(100% - left column width) plus (center column left and right padding) plus (left column left and right padding) plus (right column left padding) */
+}
+/* Footer styles */
+#footer {
+	clear:both;
+	float:left;
+	width:100%;
+	border-top:1px solid #000;
+	background-image: url('/images/back_wraper_footer.jpg');
+	height: 80px;
+}
+#footer p {
+	padding: 10px;
+	margin:0;
+}
+
+#top-title { height: 102px; }
+#top-menu { height: 35px; }
+
+#top-title p a {
+	color: #eee;
+	font-size: 12px;
+}
+
+#top-title p a:hover {
+	color: #eee;
+	font-size: 12px;
+	background: none;
+}
+
+#top-menu ul {
+	padding: 10px 0 0;
+	margin: 0;
+	list-style: none;
+}
+
+#top-menu li {
+	display: inline;
+	padding-right: 3px;
+}
+
+#top-menu li a {
+	text-decoration: none;
+	background: white;
+	border-bottom-color: #FFF;
+	-moz-border-radius: 10px 10px 0 0;
+}

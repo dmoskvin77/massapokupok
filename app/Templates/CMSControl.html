@@ -1,0 +1,19 @@
+{assign var=this value=$CMSControl}
+
+{$this.content->text}
+
+{if $this.content->alias == 'news'}
+	{component name=News}
+{/if}
+
+{if $this.content->alias == 'drawingtable'}
+	{component name=ViewDrawingTable}
+{/if}
+
+{if $this.content->alias == 'checkticket'}
+	{component name=CheckTicket}
+{/if}
+
+{if $this.content->alias == 'winners'}
+	{component name=Winner}
+{/if}

@@ -1,0 +1,218 @@
+{assign var=this value=$ChooseboardtypeControl}
+{formrestore id="user-addad"}
+
+{loadscript file='/wysibb/theme/default/wbbtheme.css' type='css'}
+{loadscript file='/css/ketchup/jquery.ketchup.css' type='css'}
+
+{loadscript file='/wysibb/jquery.wysibb.min.js' type='js'}
+{loadscript file='/wysibb/lang/ru.js' type='js'}
+
+{loadscript file='/js/ketchup/jquery.ketchup.all.min.js' type='js'}
+
+{literal}
+<script type="text/javascript">
+	$().ready(function()
+	{
+		$('#user-addad').ketchup();
+
+        $('#chtype').change(function(){
+            var getTypeId = $(this).val();
+            $('.allcatchoose').hide();
+            $('#cat-'+getTypeId).show();
+            $('#typeId').val(getTypeId);
+
+            // хардкод id
+            $('#boardprice').hide();
+            if (getTypeId == 1 || getTypeId == 2)
+                $('#boardprice').show();
+
+        });
+
+        var wbbOpt = {
+            buttons: 'bold,italic,underline,fontsize,fontcolor,smilebox,|,bullist,numlist,|,img,video,link',
+            allButtons: {
+                quote: {
+                    transform: {
+                        '<div class="quote">{SELTEXT}</div>':'[quote]{SELTEXT}[/quote]',
+                        '<div class="quote"><cite>{AUTHOR} wrote:</cite>{SELTEXT}</div>':'[quote={AUTHOR}]{SELTEXT}[/quote]'
+                    }
+                }
+            },
+            smilefind: "#smiley-box",
+            smileList: [
+                {title:CURLANG.sm1, img: '<img src="/images/smiles/sm1.png" class="sm">', bbcode:":)"},
+                {title:CURLANG.sm1, img: '<img src="/images/smiles/sm2.png" class="sm">', bbcode:":D"},
+                {title:CURLANG.sm3, img: '<img src="/images/smiles/sm3.png" class="sm">', bbcode:";)"},
+                {title:CURLANG.sm4, img: '<img src="/images/smiles/sm4.png" class="sm">', bbcode:":up:"},
+                {title:CURLANG.sm5, img: '<img src="/images/smiles/sm5.png" class="sm">', bbcode:":down:"},
+                {title:CURLANG.sm6, img: '<img src="/images/smiles/sm6.png" class="sm">', bbcode:":shock:"},
+                {title:CURLANG.sm7 ,img: '<img src="/images/smiles/sm7.png" class="sm">', bbcode:":angry:"},
+                {title:CURLANG.sm8, img: '<img src="/images/smiles/sm8.png" class="sm">', bbcode:":("},
+                {title:CURLANG.sm9, img: '<img src="/images/smiles/sm9.png" class="sm">', bbcode:":sick:"}
+            ]
+        };
+
+        $("#description").wysibb(wbbOpt);
+
+        $('.openuplwindow').click(function(e)
+        {
+            window.open("http://postimage.org/index.php?mode=website&areaid=1&hash=1&lang=russian&code=&content=family&forumurl=" + escape(document.location.href), "postimage", "resizable=no,width=500,height=400");
+            return false;
+        });
+
+	});
+
+    function postimage_query_string(postimage_search_name)
+    {
+        if (window.location.hash) {
+            postimage_query = window.location.hash.substring(1).split("&");
+            for (postimage_i = 0; postimage_i < postimage_query.length; postimage_i++) {
+                postimage_string_data = postimage_query[postimage_i].split("=");
+                if (postimage_string_data[0] == postimage_search_name) {
+                    postimage_string_data.shift();
+                    return unescape(postimage_string_data.join("="));
+                }
+            }
+        }
+        return void(0);
+    }
+
+    function parseBBCode(S) {
+        if (S.indexOf('[') < 0) return S;
+
+        function X(p, f) {return new RegExp(p, f)}
+        function D(s) {return rD.exec(s)}
+        function R(s) {return s.replace(rB, P)}
+        function A(s, p) {for (var i in p) s = s.replace(X(i, 'g'), p[i]); return s;}
+
+        function P($0, $1, $2, $3) {
+            if ($3 && $3.indexOf('[') > -1) $3 = R($3);
+            switch ($1) {
+                case 'url':case 'anchor':case 'email': return '<a '+ L[$1] + ($2||$3) +'">'+ $3 +'</a>';
+                case 'img': var d = D($2); return '<img src="'+ $3 +'"'+ (d ? ' width="'+ d[1] +'" height="'+ d[2] +'"' : '') +' alt="'+ (d ? '' : $2) +'" />';
+                case 'flash':case 'youtube': var d = D($2)||[0, 425, 366]; return '<object type="application/x-shockwave-flash" data="'+ Y[$1] + $3 +'" width="'+ d[1] +'" height="'+ d[2] +'"><param name="movie" value="'+ Y[$1] + $3 +'" /></object>';
+                case 'float': return '<span style="float: '+ $2 +'">'+ $3 +'</span>';
+                case 'left':case 'right':case 'center':case 'justify': return '<div style="text-align: '+ $1 +'">'+ $3 +'</div>';
+                case 'google':case 'wikipedia': return '<a href="'+ G[$1] + $3 +'">'+ $3 +'</a>';
+                case 'b':case 'i':case 'u':case 's':case 'sup':case 'sub':case 'h1':case 'h2':case 'h3':case 'h4':case 'h5':case 'h6':case 'table':case 'tr':case 'th':case 'td': return '<'+ $1 +'>'+ $3 +'</'+ $1 +'>';
+                case 'row': case 'r':case 'header':case 'head':case 'h':case 'col':case 'c': return '<'+ T[$1] +'>'+ $3 +'</'+ T[$1] +'>';
+                case 'acronym':case 'abbr': return '<'+ $1 +' title="'+ $2 +'">'+ $3 +'</'+ $1 +'>';
+            }
+            return '['+ $1 + ($2 ? '='+ $2 : '') +']'+ $3 +'[/'+ $1 +']';
+        }
+
+        var rB = X('\\[([a-z][a-z0-9]*)(?:=([^\\]]+))?]((?:.|[\r\n])*?)\\[/\\1]', 'g'), rD = X('^(\\d+)x(\\d+)$');
+        var L = {url: 'href="', 'anchor': 'name="', email: 'href="mailto: '};
+        var G = {google: 'http://www.google.com/search?q=', wikipedia: 'http://www.wikipedia.org/wiki/'};
+        var Y = {youtube: 'http://www.youtube.com/v/', flash: ''};
+        var T = {row: 'tr', r: 'tr', header: 'th', head: 'th', h: 'th', col: 'td', c: 'td'};
+        var C = {notag: [{'\\[': '&#91;', ']': '&#93;'}, '', ''], code: [{'<': '&lt;'}, '<code><pre>', '</pre></code>']};
+        C.php = [C.code[0], C.code[1]+ '&lt;?php ', '?>'+ C.code[2]];
+        var F = {font: 'font-family:$1', size: 'font-size:$1px', color: 'color:$1'};
+        var U = {c: 'circle', d: 'disc', s: 'square', '1': 'decimal', a: 'lower-alpha', A: 'upper-alpha', i: 'lower-roman', I: 'upper-roman'};
+        var I = {}, B = {};
+
+        for (var i in C) I['\\[('+ i +')]((?:.|[\r\n])*?)\\[/\\1]'] = function($0, $1, $2) {return C[$1][1] + A($2, C[$1][0]) + C[$1][2]};
+        for (var i in F) {B['\\['+ i +'=([^\\]]+)]'] = '<span style="'+ F[i] +'">'; B['\\[/'+ i +']'] = '</span>';}
+        B['\\[list]'] = '<ul>'; B['\\[list=(\\w)]'] = function($0, $1) {return '<ul style="list-style-type: '+ (U[$1]||'disc') +'">'}; B['\\[/list]'] = '</ul>'; B['\\[\\*]'] = '<li>';
+        B['\\[quote(?:=([^\\]]+))?]'] = function($0, $1) {return '<div class="bb-quote">'+ ($1 ? $1 +' wrote' : 'Quote') +':<blockquote>'}; B['\\[/quote]'] = '</blockquote></div>';
+        B['\\[(hr|br)]'] = '<$1 />'; B['\\[sp]'] = '&nbsp;';
+        return R(A(A(S, I), B));
+    }
+
+    function postimage_insert()
+    {
+        var addImgStr = postimage_query_string('postimage_text');
+        var addImgStrHtml = parseBBCode(addImgStr);
+        var oldDescription = opener.$('#description').val();
+
+        if (opener.$('#description').is(":visible"))
+            opener.$('#description').val(oldDescription+''+addImgStr);
+
+        if (opener.$('.wysibb-body').is(":visible"))
+            opener.$('.wysibb-body').append(addImgStrHtml);
+    }
+
+    if (opener)
+    {
+        opener.focus();
+        postimage_insert();
+        window.close();
+    }
+
+</script>
+{/literal}
+
+<h2>Я:</h2>
+<select id="chtype" name="chtype">
+{assign var=firstBoardTypeId value=0}
+{assign var=firstBoardCatId value=0}
+{foreach from=$this.boardTypes item=oneType}
+{if $firstBoardTypeId == 0}
+    {assign var=firstBoardTypeId value=$oneType->id}
+{/if}
+{assign var=boardTypeId value=$oneType->id}
+{assign var=boardTypeAlias value=$oneType->alias}
+
+    {if $this.preparedCategories}
+        {assign var=boardCats value=$this.preparedCategories.$boardTypeId}
+    {/if}
+    <option value="{$oneType->id}">{$oneType->name}</option>
+    {if $this.preparedCategories && $boardCats}
+    <div id="cat-{$oneType->id}" class="allcatchoose" style="display: none;">
+        <h3>Что:</h3>
+        <select class="chcat" id="chcat-{$oneType->id}" name="chcat-{$oneType->id}">
+        {foreach from=$boardCats item=oneCat}
+        {if $firstBoardCatId == 0}
+            {assign var=firstBoardCatId value=$oneCat->id}
+        {/if}
+        {assign var=boardCatAlias value=$oneCat->alias}
+        {capture name=aliassumm}{$boardTypeAlias}-{$boardCatAlias}{/capture}
+        {assign var=boardAllAlias value=$smarty.capture.aliassumm}
+            <option value="{$oneCat->id}">{$oneCat->name}</option>
+        {/foreach}
+        </select>
+    </div>
+    {/if}
+{/foreach}
+</select>
+
+
+<form action="{link do=useraddad}" id="user-addad" method="post">
+<input type="hidden" name="typeId" id="typeId" value="{$firstBoardTypeId}" />
+<input type="hidden" name="catId" id="catId" value="{$firstBoardCatId}" />
+{if $this.adObj}<input type="hidden" name="adId" id="adId" value="{$this.adObj->id}" />{/if}
+
+	<div class="user-ad-table">
+
+		<h3>Ваше объявление:</h3>
+
+		<dl id="name-dl">
+			<dt>Название:<span class="necessary-star">*</span></dt>
+			<dd>
+				<input type="text" id="name" name="name" maxlength="255" value="{$this.adObj->name}" data-validate="validate(required, maxlength(255))" />
+			</dd>
+		</dl>
+
+		<dl id="boardprice">
+			<dt>Цена:<span class="necessary-star">*</span></dt>
+			<dd>
+				<input type="text" id="price" name="price" maxlength="14" value="{$this.adObj->price}" data-validate="validate(maxlength(14))" />
+			</dd>
+		</dl>
+
+        <dl id="desc-dl">
+            <dt id="desc-dt">Описание <button class="openuplwindow">Добавить картинку</button> :</dt>
+            <dd id="desc-dd" style="margin-top: 6px;"><textarea name="description" id="description" style="height: 250px;">{if $this.adObj}{$this.adObj->description}{/if}</textarea></dd>
+        </dl>
+
+		<dl id="submit-dl">
+			<dt></dt>
+			<dd><input type="submit" id="submitForm" value="Сохранить *" /></dd>
+		</dl>
+
+	</div>
+
+</form>
+
+<p>* объявление будет размещено после проверки модератором.</p>

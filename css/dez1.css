@@ -1,0 +1,33 @@
+#subheader { 
+	height: 137px;
+	width: 100%;
+	background-image: url('/images/design/topbgr1.gif');
+	background-color: #555555;
+}
+
+#subleft {
+	width: 66%;
+	height: 137px;
+	background-image: url('/images/design/topbgr1.gif');
+}
+
+#subcenter {
+	width: 210px;
+	height: 137px;
+	margin-top: -137px;
+	margin-left: 66%;
+}
+
+#subimg {
+	width: 210px;
+	height: 137px;
+	position: absolute;
+}
+
+#subright {
+
+}
+
+.white-color { color: #fff; font-size: 20px !important; }
+.grey-color { color: #e0e0e0; font-size: 18px !important; float: left; width: 100%; padding-top: 7px; }
+.grey-color-main { color: #e0e0e0; font-size: 18px !important; float: left; width: 100%; padding-top: 0px; }

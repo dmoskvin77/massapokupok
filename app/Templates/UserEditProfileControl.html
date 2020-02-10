@@ -1,0 +1,79 @@
+{assign var=this value=$UserEditProfileControl}
+{formrestore id="user-register"}
+
+{loadscript file='/css/ketchup/jquery.ketchup.css' type='css'}
+{loadscript file='/js/ketchup/jquery.ketchup.all.min.js' type='js'}
+
+{literal}
+<script type="text/javascript">
+	$().ready(function()
+	{
+		$('#user-register').ketchup();
+
+		{/literal}{if $actor->requestOrg == 1 OR $actor->requestOpt == 1 OR $actor->isOpt == 1 OR $actor->isOrg == 1}{literal}
+		{/literal}{else}{literal}
+		$('#name-dl').hide();
+		$('#reg-city').hide();
+		{/literal}{/if}{literal}
+
+		$('#reqorg').click(function(e){
+			showhidedl();
+		});
+
+		$('#reqopt').click(function(e){
+			showhidedl();
+		});
+
+	});
+
+	function showhidedl()
+	{
+		if ($('#reqorg').attr("checked") == true || $('#reqopt').attr("checked") == true)
+		{
+			$('#name-dl').show();
+			$('#reg-city').show();
+		}
+		else
+		{
+			$('#name-dl').hide();
+			$('#reg-city').hide();
+		}
+	}
+
+</script>
+{/literal}
+
+<form action="{link do=usereditprofile}" id="user-register" method="post">
+<input type="hidden" name="id" value="{$actor->id}" />
+	<div class="user-register-table">
+		<h3>Редактирование профайла:</h3>
+		<dl id="name-dl">
+			<dt>Организация:</dt>
+			<dd><input type="text" id="name" name="name" value="{$actor->name}" maxlength="255" data-validate="validate(maxlength(50))" /></dd>
+		</dl>
+		<dl>
+			<dt>Фамилия:<span class="necessary-star">*</span></dt>
+			<dd><input type="text" id="lastName" name="lastName" value="{$actor->lastName}" maxlength="50" data-validate="validate(required, maxlength(50))" /></dd>
+		</dl>
+		<dl>
+			<dt>Имя:<span class="necessary-star">*</span></dt>
+			<dd><input type="text" id="firstName" name="firstName" value="{$actor->firstName}" maxlength="50" data-validate="validate(required, maxlength(50))" /></dd>
+		</dl>
+		<dl>
+			<dt>Отчество:<span class="necessary-star">*</span></dt>
+			<dd><input type="text" id="secondName" name="secondName" value="{$actor->secondName}" maxlength="50" data-validate="validate(required, maxlength(50))" /></dd>
+		</dl>
+		<dl>
+			<dt>Контактный телефон:<span class="necessary-star">*</span></dt>
+			<dd>+7 <input type="text" id="phone1" name="phone1" maxlength="10" value="{$actor->phone1}" data-validate="validate(required, maxlength(10))" /></dd>
+		</dl>
+		<dl class="check-dl">
+			<dt></dt>
+			<dd><input type="checkbox" name="reqorg" {if $actor->isOrg != null OR $actor->requestOrg != null}checked="checked"{/if} {if $actor->isOrg == 1}disabled{/if} id="reqorg" /> <label for="reqorg">я хочу работать организатором</label></dd>
+		</dl>
+		<dl id="submit-dl">
+			<dt></dt>
+			<dd><input type="submit" id="submitForm" value="Сохранить данные"/></dd>
+		</dl>
+	</div>
+</form>

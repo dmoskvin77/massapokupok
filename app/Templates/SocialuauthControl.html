@@ -1,0 +1,69 @@
+{assign var=this value=$SocialuauthControl}
+{formrestore id="user-register"}
+
+{loadscript file='/css/ketchup/jquery.ketchup.css' type='css'}
+{loadscript file='/js/ketchup/jquery.ketchup.all.min.js' type='js'}
+
+{literal}
+<script type="text/javascript">
+	$().ready(function()
+	{
+		$('#user-register').ketchup();
+
+		$('#name-dl').hide();
+		$('#reg-city').hide();
+
+		$('#reqorg').click(function(e){
+			showhidedl();
+		});
+
+		$('#reqopt').click(function(e){
+			showhidedl();
+		});
+
+	});
+
+	function showhidedl()
+	{
+		if ($('#reqorg').attr("checked") == true || $('#reqopt').attr("checked") == true)
+		{
+			$('#name-dl').show();
+			$('#reg-city').show();
+		}
+		else
+		{
+			$('#name-dl').hide();
+			$('#reg-city').hide();
+		}
+	}
+
+</script>
+{/literal}
+
+<form action="{link do=userregister}" id="user-register" method="post">
+	<input type="hidden" name="network" value="{$this.network}" />
+	<input type="hidden" name="uid" value="{$this.uid}" />
+    <input type="hidden" value="on" name="checkrules" id="checkrules" />
+	<div class="user-register-table">
+		<h3>Уточните Ваши данные:</h3>
+		<dl>
+			<dt>E-mail:<span class="necessary-star">*</span></dt>
+			<dd><input type="text" autocomplete="off" id="reg_email" name="email" maxlength="255" data-validate="validate(email, rangelength(4, 100))" /></dd>
+		</dl>
+		<dl>
+			<dt>Ник на сайте:<span class="necessary-star">*</span></dt>
+			<dd><input type="text" autocomplete="off" id="nickName" name="nickName" maxlength="255" data-validate="validate(required, rangelength(4, 15))" /></dd>
+		</dl>
+		<dl>
+			<dt>Пароль:<span class="necessary-star">*</span></dt>
+			<dd><input type="password" autocomplete="off" id="reg_password" name="password" maxlength="255" data-validate="validate(required, rangelength(4, 10))" /></dd>
+		</dl>
+		<dl id="submit-dl">
+			<dt></dt>
+			<dd><input type="submit" id="submitForm" value="Первый вход через соц.сеть"/></dd>
+		</dl>
+	</div>
+</form>
+
+<h2>Условия и правила предоставления сервиса</h2>
+<p>Данный веб сайт представляет собой площадку для размещения объявлений о сборе заказов на выкуп товаров у оптовиков. Все взаиморасчеты между участниками и организаторами закупок производятся вне сайта.</p>

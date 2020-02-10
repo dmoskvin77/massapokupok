@@ -1,0 +1,12 @@
+{assign var=this value=$MenuPagesBottomControl}
+
+{if $this.menu}
+<div class="menupages-div side-container">
+<h3>Информация о совместных покупках:</h3>
+<ul class="menupages-top">
+	{foreach from=$this.menu item=menuitem}
+		<li><a href="/{$menuitem.link}">{$menuitem.title}</a></li>
+	{/foreach}
+</ul>
+</div>
+{/if}

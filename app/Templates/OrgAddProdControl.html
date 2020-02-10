@@ -1,0 +1,73 @@
+{assign var=this value=$OrgAddProdControl}
+{formrestore id="prod-add"}
+
+{loadscript file='/css/ketchup/jquery.ketchup.css' type='css'}
+{loadscript file='/js/ketchup/jquery.ketchup.all.min.js' type='js'}
+
+{loadscript file='/js/fckeditor/jquery.FCKEditor.js' type='js'}
+{loadscript file='/js/fckeditor/jquery.form.js' type='js'}
+
+{literal}
+<script type="text/javascript">
+	$().ready(function()
+	{
+		$('#prod-add').ketchup();
+		$('#description').fck({path: '/fckeditor/'});
+
+	});
+
+</script>
+{/literal}
+
+<form action="{link do=orgaddprod}" id="prod-add" method="post" enctype="multipart/form-data">
+<input type="hidden" name="orgId" value="{$this.orgId}" />
+<input type="hidden" name="mode" value="{$this.mode}" />
+<input type="hidden" name="headid" value="{$this.headid}" />
+
+	<div class="prod-add-table">
+		<h2>Добавление нового товара</h2>
+		<dl>
+			<dt>Название товара: <span class="necessary-star">*</span></dt>
+			<dd><input type="text" id="name" name="name" maxlength="255" data-validate="validate(required, maxlength(255))" /></dd>
+		</dl>
+		<dl>
+			<dt>Артикул: <span class="necessary-star">*</span></dt>
+			<dd><input type="text" id="artNumber" name="artNumber" maxlength="255" data-validate="validate(required, maxlength(255))" /></dd>
+		</dl>
+
+		<dl id="desc-dl">
+			<dt id="desc-dt">Описание:</dt>
+			<dd id="desc-dd"><textarea name="description" id="description"></textarea></dd>
+		</dl>
+
+		<!-- фотки -->
+		<dl id="file-dl">
+			<dt id="file-dt">До 10-ти картинок:</dt>
+			<dd id="file-dd">
+				<ul>
+					<li><input class="u-file" name="file1" type="file" /></li>
+					<li><input class="u-file" name="file2" type="file" /></li>
+					<li><input class="u-file" name="file3" type="file" /></li>
+					<li><input class="u-file" name="file4" type="file" /></li>
+					<li><input class="u-file" name="file5" type="file" /></li>
+					<li><input class="u-file" name="file6" type="file" /></li>
+					<li><input class="u-file" name="file7" type="file" /></li>
+					<li><input class="u-file" name="file8" type="file" /></li>
+					<li><input class="u-file" name="file9" type="file" /></li>
+					<li><input class="u-file" name="file10" type="file" /></li>
+				</ul>
+			</dd>
+		</dl>
+
+
+		<dl id="submit-dl">
+			<dt></dt>
+			<dd>
+				<input type="submit" id="submitForm" value="Добавить товар"/>
+				{if $this.mode == 'addzakupkaline'}<button onclick="window.location.href = '{link show=orgviewzakupka headid=$this.headid}'">Отмена</button>{/if}
+			</dd>
+		</dl>
+
+	</div>
+
+</form>

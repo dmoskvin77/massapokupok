@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0">
+<channel>
+	<title>{if $pageTitle}{$pageTitle}{/if}{if $p > 1} - Страница {$p}{/if}</title>
+	<link>{$siteUrl}</link>
+	<description>{$pageDesc}</description>
+	<language>ru</language>
+	{include file=$CURRENT_CONTROL_TEMPLATE}
+</channel>
+</rss>

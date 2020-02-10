@@ -1,0 +1,40 @@
+{assign var=this value=$FinansesControl}
+
+{if $this.payObjects}
+	<h4>Оплаты</h4>
+	<table class="table table-striped table-bordered table-hover" cellspacing="0" cellpadding="0" style="font-size: 11px;">
+		<tr>
+			<th>ID</th>
+			<th>Операция</th>
+			<th>Сумма</th>
+			<th>Инфомация</th>
+			<th>Закупка</th>
+			<th>Дата создания</th>
+			<th>Дата подтверждения</th>
+			<th>Статус</th>
+		</tr>
+
+		{foreach from=$this.payObjects item=onepay}
+		{assign var=opid value=$onepay->id}
+		{assign var=zakid value=$onepay->headId}
+		{assign var=opstatus value=$onepay->status}
+		{assign var=optype value=$onepay->type}
+		{assign var=opway value=$onepay->way}
+		{assign var=oneZakObj value=$this.zakData.$zakid}
+		<tr>
+			<td>{$onepay->id}</td>
+			<td>{$this.payTypes.$optype}, {$this.payWays.$opway}</td>
+			<td align="right">{$onepay->amount|numberformat}</td>
+			<td>{$onepay->userInfo|truncate:50:"...":false}</td>
+			<td><a href="{link show=viewcollection id=$oneZakObj->id}" target="_blank">{$oneZakObj->name}</a></td>
+			<td>{$onepay->dateCreate|dateformat:"d M Y в H:i"}</td>
+			<td>{if $onepay->dateConfirm}{$onepay->dateConfirm|dateformat:"d M Y в H:i"}{/if}</td>
+			<td>{$this.payStatuses.$opstatus}</td>
+		</tr>
+		{/foreach}
+
+	</table>
+
+{else}
+	<h4>Список оплат пуст</h4>
+{/if}

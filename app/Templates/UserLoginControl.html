@@ -1,0 +1,39 @@
+{assign var=this value=$UserLoginControl}
+{formrestore id="user-login"}
+
+{loadscript file='/css/ketchup/jquery.ketchup.css' type='css'}
+{loadscript file='/js/ketchup/jquery.ketchup.all.min.js' type='js'}
+
+{literal}
+<script type="text/javascript">
+	$().ready(function()
+	{
+		$('#user-login').ketchup();
+	});
+
+</script>
+{/literal}
+
+<form action="{link do=userlogin}" id="user-login" method="post">
+<input type="hidden" name="goto" value="{$this.goto}" />
+	<div class="user-login-table">
+		<h3>Войти:</h3>
+		<dl>
+			<dt>E-mail:</dt>
+			<dd><input type="text" id="email" name="email" maxlength="100" data-validate="validate(rangelength(4, 100))" /></dd>
+		</dl>
+		<dl>
+			<dt>Пароль:</dt>
+			<dd><input type="password" id="password" name="password" maxlength="20" data-validate="validate(rangelength(4, 20))" /></dd>
+		</dl>
+		<dl id="submit-dl">
+			<dt></dt>
+			<dd><input type="submit" id="submitForm" value="Вход"/></dd>
+		</dl>
+
+			<script src="//ulogin.ru/js/ulogin.js"></script>
+			<div id="uLogin" data-ulogin="display=panel;fields=first_name,last_name;providers=vkontakte,odnoklassniki,mailru,facebook;redirect_uri=socialuauth"></div><br/>
+
+		<a href="{link show=userregister}"><strong>Регистрация</strong></a> | <a href="{link show=usernewpass}">Забыли пароль?</a>
+	</div>
+</form>
